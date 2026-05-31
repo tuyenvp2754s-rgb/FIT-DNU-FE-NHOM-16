@@ -1,0 +1,618 @@
+<!-- adoption.html -->
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>
+    Đăng ký nhận nuôi - PetAdopt
+  </title>
+
+  <!-- FONT -->
+
+  <link rel="preconnect"
+    href="https://fonts.googleapis.com">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="css/style.css">
+
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <header class="navbar">
+
+    <div class="container nav-wrapper">
+
+      <a
+        href="index.html"
+        class="logo">
+
+        🐾 PetAdopt
+
+      </a>
+
+      <nav>
+
+        <a href="index.html">
+          Trang chủ
+        </a>
+
+        <a
+          href="pets.html"
+          class="active">
+
+          Thú cưng
+        </a>
+
+        <a href="history.html">
+          Lịch sử
+        </a>
+
+        <a href="blog.html">
+          Tin tức
+        </a>
+
+        <a href="profile.html">
+          Hồ sơ
+        </a>
+
+      </nav>
+
+      <a
+        href="pets.html"
+        class="btn btn-primary">
+
+        Quay lại
+
+      </a>
+
+    </div>
+
+  </header>
+
+  <!-- PAGE HEADER -->
+
+  <section class="page-header">
+
+    <div class="container">
+
+      <span class="badge">
+
+        🐾 Đăng ký nhận nuôi
+
+      </span>
+
+      <h1>
+
+        Mang một bé thú cưng về nhà
+
+      </h1>
+
+      <p>
+
+        Hoàn thành biểu mẫu để bắt đầu
+        hành trình yêu thương cùng thú cưng.
+
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- FORM SECTION -->
+
+  <section class="section pt-0">
+
+    <div class="container">
+
+      <div class="adoption-wrapper">
+
+        <!-- LEFT -->
+
+        <div class="adoption-left">
+
+          <!-- PROGRESS -->
+
+          <div class="progress-wrapper">
+
+            <div class="progress-bar">
+
+              <div class="progress-fill"></div>
+
+            </div>
+
+            <div class="progress-steps">
+
+              <div class="step active">
+
+                <span>1</span>
+                <p>Thông tin</p>
+
+              </div>
+
+              <div class="step">
+
+                <span>2</span>
+                <p>Điều kiện sống</p>
+
+              </div>
+
+              <div class="step">
+
+                <span>3</span>
+                <p>Xác nhận</p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- FORM -->
+
+          <form
+            class="adoption-form"
+            id="adoptionForm">
+
+            <!-- STEP 1 -->
+
+            <div class="form-step active">
+
+              <h2>
+
+                Thông tin cá nhân
+
+              </h2>
+
+              <!-- INPUT -->
+
+              <div class="input-group">
+
+                <label>
+                  Họ và tên
+                </label>
+
+                <input
+                  type="text"
+                  placeholder="Nhập họ tên">
+
+              </div>
+
+              <div class="input-group">
+
+                <label>
+                  Email
+                </label>
+
+                <input
+                  type="email"
+                  placeholder="Nhập email">
+
+              </div>
+
+              <div class="input-group">
+
+                <label>
+                  Số điện thoại
+                </label>
+
+                <input
+                  type="tel"
+                  placeholder="Nhập số điện thoại">
+
+              </div>
+
+              <div class="input-group">
+
+                <label>
+                  Địa chỉ
+                </label>
+
+                <textarea
+                  rows="4"
+                  placeholder="Nhập địa chỉ"></textarea>
+
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-primary next-step">
+
+                Tiếp tục
+
+              </button>
+
+            </div>
+
+            <!-- STEP 2 -->
+
+            <div class="form-step">
+
+              <h2>
+
+                Điều kiện sống
+
+              </h2>
+
+              <!-- INPUT -->
+
+              <div class="input-group">
+
+                <label>
+                  Bạn đang sống ở?
+                </label>
+
+                <select>
+
+                  <option>
+                    Nhà riêng
+                  </option>
+
+                  <option>
+                    Căn hộ
+                  </option>
+
+                  <option>
+                    Ký túc xá
+                  </option>
+
+                </select>
+
+              </div>
+
+              <div class="input-group">
+
+                <label>
+                  Bạn đã từng nuôi thú cưng chưa?
+                </label>
+
+                <select>
+
+                  <option>
+                    Đã từng
+                  </option>
+
+                  <option>
+                    Chưa từng
+                  </option>
+
+                </select>
+
+              </div>
+
+              <div class="input-group">
+
+                <label>
+                  Thời gian chăm sóc mỗi ngày
+                </label>
+
+                <input
+                  type="text"
+                  placeholder="Ví dụ: 3 - 5 giờ">
+
+              </div>
+
+              <div class="input-group">
+
+                <label>
+                  Upload ảnh nơi ở
+                </label>
+
+                <input type="file">
+
+              </div>
+
+              <!-- ACTIONS -->
+
+              <div class="step-actions">
+
+                <button
+                  type="button"
+                  class="btn btn-outline prev-step">
+
+                  Quay lại
+
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-primary next-step">
+
+                  Tiếp tục
+
+                </button>
+
+              </div>
+
+            </div>
+
+            <!-- STEP 3 -->
+
+            <div class="form-step">
+
+              <h2>
+
+                Xác nhận thông tin
+
+              </h2>
+
+              <!-- SUMMARY -->
+
+              <div class="summary-box">
+
+                <h3>
+
+                  Thông tin đăng ký
+
+                </h3>
+
+                <p>
+
+                  ✔ Thông tin cá nhân hợp lệ
+
+                </p>
+
+                <p>
+
+                  ✔ Điều kiện chăm sóc đạt yêu cầu
+
+                </p>
+
+                <p>
+
+                  ✔ Hồ sơ đã sẵn sàng gửi đi
+
+                </p>
+
+              </div>
+
+              <!-- NOTE -->
+
+              <div class="confirm-note">
+
+                <p>
+
+                  Sau khi gửi đơn,
+                  đội ngũ PetAdopt sẽ liên hệ với bạn
+                  trong vòng 24 giờ.
+
+                </p>
+
+              </div>
+
+              <!-- ACTIONS -->
+
+              <div class="step-actions">
+
+                <button
+                  type="button"
+                  class="btn btn-outline prev-step">
+
+                  Quay lại
+
+                </button>
+
+                <button
+                  type="submit"
+                  class="btn btn-primary">
+
+                  Gửi hồ sơ nhận nuôi
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </form>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="adoption-right">
+
+          <!-- PET CARD -->
+
+          <div class="card adopt-pet-card">
+
+            <img
+              src="https://images.unsplash.com/photo-1517849845537-4d257902454a">
+
+            <h3>
+
+              Bella
+
+            </h3>
+
+            <div class="pet-meta">
+
+              <span>
+                🐶 Chó
+              </span>
+
+              <span>
+                🎂 2 tuổi
+              </span>
+
+            </div>
+
+            <p>
+
+              Bé rất thân thiện,
+              thích chơi đùa và quấn người.
+
+            </p>
+
+          </div>
+
+          <!-- INFO -->
+
+          <div class="card adoption-info-card">
+
+            <h3>
+
+              📌 Lưu ý nhận nuôi
+
+            </h3>
+
+            <ul>
+
+              <li>
+                ✔ Yêu thương thú cưng lâu dài
+              </li>
+
+              <li>
+                ✔ Không bỏ rơi thú cưng
+              </li>
+
+              <li>
+                ✔ Chăm sóc sức khỏe định kỳ
+              </li>
+
+              <li>
+                ✔ Môi trường sống an toàn
+              </li>
+
+            </ul>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- SUCCESS MODAL -->
+
+  <div
+    class="modal"
+    id="successModal">
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content success-modal">
+
+      <div class="success-icon">
+
+        ✅
+
+      </div>
+
+      <h2>
+
+        Gửi hồ sơ thành công
+
+      </h2>
+
+      <p>
+
+        Chúng tôi sẽ liên hệ với bạn
+        sớm nhất có thể.
+
+      </p>
+
+      <a
+        href="history.html"
+        class="btn btn-primary">
+
+        Xem lịch sử hồ sơ
+
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+
+    <div class="container footer-grid">
+
+      <div>
+
+        <h2>
+          PetAdopt
+        </h2>
+
+        <p>
+
+          Kết nối yêu thương
+          giữa thú cưng và gia đình.
+
+        </p>
+
+      </div>
+
+      <div>
+
+        <h3>
+          Điều hướng
+        </h3>
+
+        <a href="pets.html">
+          Thú cưng
+        </a>
+
+        <a href="blog.html">
+          Tin tức
+        </a>
+
+        <a href="profile.html">
+          Hồ sơ
+        </a>
+
+      </div>
+
+      <div>
+
+        <h3>
+          Liên hệ
+        </h3>
+
+        <p>
+          support@petadopt.com
+        </p>
+
+        <p>
+          0123 456 789
+        </p>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+  <!-- TOAST -->
+
+  <div class="toast"></div>
+
+  <!-- JS -->
+
+  <script src="js/app.js"></script>
+
+</body>
+
+</html>

@@ -1,502 +1,718 @@
+<!-- index.html -->
+
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetAdopt</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #fafafa;
-        }
-        @keyframes gradientAnim {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .animated-bg {
-            background: linear-gradient(-45deg, #f8fafc, #f5f3ff, #faf5ff, #f0fdf4);
-            background-size: 400% 400%;
-            animation: gradientAnim 12s ease infinite;
-        }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-        @keyframes blob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(40px, -60px) scale(1.15); }
-            66% { transform: translate(-30px, 30px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
-        .animate-blob {
-            animation: blob 16s infinite alternate;
-        }
-        .delay-2000 {
-            animation-delay: 3s;
-        }
-        .delay-4000 {
-            animation-delay: 6s;
-        }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        .shimmer-effect {
-            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        .pulse-glow {
-            box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
-            animation: glowEffect 2s infinite;
-        }
-        @keyframes glowEffect {
-            70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-    </style>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>
+    PetAdopt Professional
+  </title>
+
+  <!-- FONT -->
+
+  <link rel="preconnect"
+    href="https://fonts.googleapis.com">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="css/style.css">
+
 </head>
-<body class="animated-bg min-h-screen flex flex-col overflow-x-hidden selection:bg-indigo-500 selection:text-white">
 
-    <div class="fixed top-20 left-10 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-    <div class="fixed top-40 right-10 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob delay-2000"></div>
-    <div class="fixed bottom-10 left-20 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-blob delay-4000"></div>
+<body>
 
-    <nav class="glass-panel sticky top-0 z-40 border-b border-slate-200/50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <a href="index.html" class="flex items-center space-x-3 group relative">
-                    <span class="text-3xl transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-300">✨</span>
-                    <span class="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent group-hover:brightness-110 transition-all">PetAdopt</span>
-                </a>
-                
-                <div class="flex items-center space-x-4">
-                    <span id="api-status" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Đang kết nối...
-                    </span>
-                    <a href="admin.html" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-5 py-2.5 rounded-2xl font-bold shadow-lg shadow-indigo-600/10 transition-all duration-300 text-sm flex items-center gap-2">
-                        <i class="fa-solid fa-user-gear"></i> Quản trị
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+  <!-- NAVBAR -->
 
-    <header class="py-16 text-center relative z-10">
-        <div class="max-w-4xl mx-auto px-4">
-            <h1 class="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-none mb-6">
-                Tìm kiếm mảnh ghép <br>
-                <span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">yêu thương hoàn hảo</span>
-            </h1>
-            <p class="text-slate-500 text-base sm:text-lg font-medium max-w-xl mx-auto mb-10">
-                Hệ thống kết nối thời gian thực và tự động tối ưu hình ảnh từ Swagger Petstore API.
-            </p>
+  <header class="navbar">
 
-            <div class="glass-panel p-6 rounded-3xl shadow-xl max-w-3xl mx-auto">
-                <div class="flex flex-col md:flex-row gap-3">
-                    <div class="relative flex-grow">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="search-input" oninput="filterAndSort()" placeholder="Tìm theo tên hoặc giống loài..." class="w-full bg-white/90 border border-slate-200 rounded-2xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all shadow-sm">
-                    </div>
-                    <div class="flex gap-2">
-                        <select id="gender-filter" onchange="filterAndSort()" class="bg-white/90 border border-slate-200 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                            <option value="all">Tất cả giới tính</option>
-                            <option value="male">Đực</option>
-                            <option value="female">Cái</option>
-                        </select>
-                        <select id="sort-filter" onchange="filterAndSort()" class="bg-white/90 border border-slate-200 rounded-2xl px-4 py-3.5 text-sm font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                            <option value="default">Sắp xếp</option>
-                            <option value="price-asc">Phí nuôi tăng dần</option>
-                            <option value="price-desc">Phí nuôi giảm dần</option>
-                            <option value="age-asc">Tuổi nhỏ nhất</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <div class="container nav-wrapper">
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex-grow w-full relative z-10">
-        <div id="skeleton-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-white rounded-[32px] p-4 border border-slate-100 space-y-4 shadow-sm">
-                <div class="shimmer-effect rounded-2xl h-56 w-full"></div>
-                <div class="shimmer-effect h-5 rounded w-1/2"></div>
-                <div class="shimmer-effect h-3 rounded w-1/3"></div>
-                <div class="shimmer-effect h-12 rounded-2xl w-full"></div>
-            </div>
-            <div class="bg-white rounded-[32px] p-4 border border-slate-100 space-y-4 shadow-sm">
-                <div class="shimmer-effect rounded-2xl h-56 w-full"></div>
-                <div class="shimmer-effect h-5 rounded w-1/2"></div>
-                <div class="shimmer-effect h-3 rounded w-1/3"></div>
-                <div class="shimmer-effect h-12 rounded-2xl w-full"></div>
-            </div>
-            <div class="bg-white rounded-[32px] p-4 border border-slate-100 space-y-4 shadow-sm">
-                <div class="shimmer-effect rounded-2xl h-56 w-full"></div>
-                <div class="shimmer-effect h-5 rounded w-1/2"></div>
-                <div class="shimmer-effect h-3 rounded w-1/3"></div>
-                <div class="shimmer-effect h-12 rounded-2xl w-full"></div>
-            </div>
-        </div>
+      <!-- LOGO -->
 
-        <div id="pet-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 hidden"></div>
-    </main>
+      <a
+        href="index.html"
+        class="logo">
 
-    <div id="adopt-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-[32px] max-w-lg w-full mx-4 overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
-            <div class="relative h-64 bg-slate-100 flex-shrink-0">
-                <img id="modal-pet-img" src="" alt="Pet" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-                <button onclick="closeModal()" class="absolute top-4 right-4 bg-white/25 hover:bg-white/45 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all backdrop-blur-md hover:rotate-90">
-                    <i class="fa-solid fa-times text-lg"></i>
-                </button>
-                <div class="absolute bottom-6 left-6 text-white">
-                    <h3 id="modal-pet-name" class="text-3xl font-extrabold tracking-tight"></h3>
-                    <p id="modal-pet-info" class="text-sm font-semibold opacity-90 mt-1"></p>
-                </div>
-            </div>
-            <div class="p-8 overflow-y-auto flex-grow space-y-6 custom-scrollbar">
-                <div>
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Thông tin đặc trưng</h4>
-                    <p id="modal-pet-desc" class="text-slate-600 text-sm leading-relaxed"></p>
-                </div>
+        🐾 PetAdopt
 
-                <form id="adopt-form" onsubmit="submitForm(event)" class="space-y-4 border-t border-slate-100 pt-6">
-                    <input type="hidden" id="modal-pet-id">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Họ và tên của bạn</label>
-                        <input type="text" id="user-name" required class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Số điện thoại liên hệ</label>
-                        <input type="tel" id="user-phone" required class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                    </div>
-                    <button id="submit-btn" type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:brightness-110 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-indigo-600/20 transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-heart-circle-check"></i> Đăng Ký Nhận Nuôi
-                    </button>
-                </form>
-            </div>
-        </div>
+      </a>
+
+      <!-- MENU -->
+
+      <nav>
+
+        <a
+          href="index.html"
+          class="active">
+
+          Trang chủ
+
+        </a>
+
+        <a href="pets.html">
+          Thú cưng
+        </a>
+
+        <a href="history.html">
+          Lịch sử
+        </a>
+
+        <a href="blog.html">
+          Tin tức
+        </a>
+
+        <a href="profile.html">
+          Hồ sơ
+        </a>
+
+        <a href="admin.html">Admin</a>
+      </nav>
+
+      <!-- BUTTON -->
+
+      <a
+        href="pets.html"
+        class="btn btn-primary">
+
+        Nhận nuôi ngay
+
+      </a>
+
     </div>
 
-    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900/95 backdrop-blur-md text-white px-6 py-4 rounded-2xl shadow-2xl z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 border border-slate-800">
-        <div id="toast-icon" class="bg-indigo-500 w-8 h-8 rounded-full flex items-center justify-center text-sm">✨</div>
+  </header>
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="container hero-wrapper">
+
+      <!-- LEFT -->
+
+      <div class="hero-content">
+
+        <span class="badge">
+
+          🐶 Nền tảng nhận nuôi thú cưng
+
+        </span>
+
+        <h1>
+
+          Mọi thú cưng đều xứng đáng
+          có một mái ấm yêu thương
+
+        </h1>
+
+        <p>
+
+          PetAdopt Professional giúp kết nối
+          các thú cưng đang cần cứu hộ
+          với những gia đình yêu thương thật sự.
+
+        </p>
+
+        <!-- BUTTONS -->
+
+        <div class="hero-buttons">
+
+          <a
+            href="pets.html"
+            class="btn btn-primary">
+
+            Nhận nuôi ngay
+
+          </a>
+
+          <button class="btn btn-outline">
+
+            Trở thành tình nguyện viên
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT -->
+
+      <div class="hero-image">
+
+        <img
+          src="https://images.unsplash.com/photo-1517849845537-4d257902454a">
+
+        <!-- FLOATING CARD -->
+
+        <div class="floating-card float-1">
+
+          ❤️ 2,500+ thú cưng
+          đã được nhận nuôi
+
+        </div>
+
+        <div class="floating-card float-2">
+
+          🏠 1,200+ gia đình hạnh phúc
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- STATS -->
+
+  <section class="section">
+
+    <div class="container">
+
+      <div class="stats-grid">
+
+        <!-- CARD -->
+
+        <div class="card stat-card">
+
+          <h2>2500+</h2>
+
+          <p>
+            Thú cưng đã được nhận nuôi
+          </p>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div class="card stat-card">
+
+          <h2>1200+</h2>
+
+          <p>
+            Gia đình hạnh phúc
+          </p>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div class="card stat-card">
+
+          <h2>85+</h2>
+
+          <p>
+            Trạm cứu hộ hợp tác
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PROCESS -->
+
+  <section class="section">
+
+    <div class="container">
+
+      <!-- HEADING -->
+
+      <div class="section-heading">
+
         <div>
-            <p id="toast-title" class="font-bold text-sm"></p>
-            <p id="toast-msg" class="text-xs text-slate-400 mt-0.5"></p>
+
+          <span class="badge">
+
+            Quy trình nhận nuôi
+
+          </span>
+
+          <h2 class="section-title">
+
+            Chỉ với 3 bước đơn giản
+
+          </h2>
+
         </div>
+
+      </div>
+
+      <!-- STEPS -->
+
+      <div class="steps-grid">
+
+        <!-- STEP -->
+
+        <div class="card step-card">
+
+          <div class="step-number">
+
+            01
+
+          </div>
+
+          <h3>
+
+            Chọn thú cưng
+
+          </h3>
+
+          <p>
+
+            Tìm kiếm thú cưng phù hợp
+            với gia đình và sở thích của bạn.
+
+          </p>
+
+        </div>
+
+        <!-- STEP -->
+
+        <div class="card step-card">
+
+          <div class="step-number">
+
+            02
+
+          </div>
+
+          <h3>
+
+            Gửi đơn đăng ký
+
+          </h3>
+
+          <p>
+
+            Điền thông tin cá nhân và
+            điều kiện chăm sóc thú cưng.
+
+          </p>
+
+        </div>
+
+        <!-- STEP -->
+
+        <div class="card step-card">
+
+          <div class="step-number">
+
+            03
+
+          </div>
+
+          <h3>
+
+            Đón bé về nhà
+
+          </h3>
+
+          <p>
+
+            Hoàn tất thủ tục và
+            chào đón thành viên mới.
+
+          </p>
+
+        </div>
+
+      </div>
+
     </div>
 
-    <footer class="bg-white/60 border-t border-slate-200/50 py-8 text-center text-sm text-slate-500 mt-12 relative z-10">
-        <p>© 2026 PetAdopt High-End. Swagger Petstore Synchronized.</p>
-    </footer>
+  </section>
 
-    <script>
-        const API_URL = 'https://petstore.swagger.io/v2/pet';
-        let allPets = [];
-        let likedPets = JSON.parse(localStorage.getItem('liked')) || [];
+  <!-- NEW PETS -->
 
-        const fallbackImages = [
-            "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500",
-            "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=500",
-            "https://images.unsplash.com/photo-1537151625747-7ae85c0a27d6?q=80&w=500",
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=500",
-            "https://images.unsplash.com/photo-1534361960057-19889db9621e?q=80&w=500",
-            "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=500",
-            "https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=500",
-            "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=500",
-            "https://images.unsplash.com/photo-1517423568366-8b83523034fd?q=80&w=500",
-            "https://images.unsplash.com/photo-1513360309081-36f5e878fc11?q=80&w=500",
-            "https://images.unsplash.com/photo-1561037404-61cd46aa615b?q=80&w=500",
-            "https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?q=80&w=500",
-            "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?q=80&w=500",
-            "https://images.unsplash.com/photo-1507146426996-ef05306b995a?q=80&w=500",
-            "https://images.unsplash.com/photo-1611003228941-98852ba62227?q=80&w=500"
-        ];
+  <section class="section">
 
-        const fallbackNames = [
-            "Bánh Bao", "Mochi", "Hạt Dẻ", "Mây", "Sữa", "Đậu Phộng", "Cá Hồi", 
-            "Kem", "Bông", "Kiki", "Milo", "Luna", "Coco", "Chiko", "Xuka", "Nôbita",
-            "Mít", "Bơ", "Xoài", "Đu Đủ", "Khoai Tây", "Củ Cải", "Hành Tây", "Đậu Đỏ"
-        ];
+    <div class="container">
 
-        const fallbackBreeds = [
-            "Chó Samoyed", "Chó Poodle", "Phốc Sóc", "Chó Corgi", "Golden Retriever", "Shiba Inu", 
-            "Husky Sibir", "Mèo Anh Lông Ngắn", "Mèo Ba Tư", "Mèo Munchkin", "Pug"
-        ];
+      <!-- HEADER -->
 
-        const safeString = (val) => {
-            if (val === null || val === undefined) return "";
-            if (typeof val === "object") return "";
-            return String(val).trim();
-        };
+      <div class="section-heading">
 
-        const mapStatusToUI = (status) => {
-            if (status === "available") return "Còn";
-            if (status === "pending") return "Đang chờ";
-            if (status === "sold") return "Đã được nhận";
-            return "Còn";
-        };
+        <div>
 
-        const mapPetToUI = (pet) => {
-            const numId = Math.abs(Number(pet.id || 0)) || Date.now();
-            
-            const rawName = safeString(pet.name);
-            const isInvalidName = !rawName || rawName === "doggie" || rawName === "hello kity" || rawName === "string" || rawName.toLowerCase().includes("test");
-            const finalName = isInvalidName ? fallbackNames[numId % fallbackNames.length] : rawName;
+          <span class="badge">
 
-            const rawBreed = pet.category ? safeString(pet.category.name) : "";
-            const isInvalidBreed = !rawBreed || rawBreed === "string" || rawBreed.toLowerCase().includes("test");
-            const finalBreed = isInvalidBreed ? fallbackBreeds[numId % fallbackBreeds.length] : rawBreed;
+            🐾 Thú cưng mới
 
-            const rawPhoto = pet.photoUrls && pet.photoUrls[0] ? safeString(pet.photoUrls[0]) : "";
-            const isInvalidPhoto = !rawPhoto || !rawPhoto.startsWith("http");
-            const finalPhoto = isInvalidPhoto ? fallbackImages[numId % fallbackImages.length] : rawPhoto;
+          </span>
 
-            const rawTag = pet.tags && pet.tags[0] ? safeString(pet.tags[0].name) : "";
-            const finalGender = (rawTag && rawTag !== "string") ? rawTag : (numId % 2 === 0 ? "female" : "male");
+          <h2 class="section-title">
 
-            return {
-                id: String(pet.id),
-                ten: finalName,
-                loai: finalBreed,
-                breed: finalBreed,
-                age: `${(numId % 18) + 3} tháng`,
-                tuoi: (numId % 18) + 3,
-                hinhAnh: finalPhoto,
-                gender: finalGender,
-                price: (numId % 80) + 15,
-                status: mapStatusToUI(pet.status),
-                description: `Bé ${finalName} thuộc giống ${finalBreed} cực kỳ dễ thương, quấn người và năng động.`
-            };
-        };
+            Những bé đang chờ mái ấm
 
-        async function fetchPets() {
-            const apiStatus = document.getElementById('api-status');
-            const skeleton = document.getElementById('skeleton-container');
-            const container = document.getElementById('pet-container');
+          </h2>
 
-            try {
-                const response = await fetch(`${API_URL}/findByStatus?status=available,pending,sold`);
-                if (!response.ok) throw new Error();
-                const rawPets = await response.json();
-                
-                allPets = rawPets.filter(p => p && p.id).slice(0, 100).map(mapPetToUI);
+        </div>
 
-                apiStatus.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100 pulse-glow";
-                apiStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Trực tuyến';
-                
-                filterAndSort();
+        <a
+          href="pets.html"
+          class="btn btn-outline">
 
-                skeleton.classList.add('hidden');
-                container.classList.remove('hidden');
-            } catch (error) {
-                apiStatus.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-100";
-                apiStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Ngoại tuyến';
-                showToast("Mất kết nối", "Vui lòng kiểm tra lại đường truyền API.", "❌");
-            }
-        }
+          Xem tất cả
 
-        function filterAndSort() {
-            const container = document.getElementById('pet-container');
-            container.innerHTML = "";
+        </a>
 
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const genderFilter = document.getElementById('gender-filter').value;
-            const sortFilter = document.getElementById('sort-filter').value;
+      </div>
 
-            let filtered = allPets.filter(p => {
-                const name = p.ten ? p.ten.toLowerCase() : '';
-                const breed = p.loai ? p.loai.toLowerCase() : '';
-                const matchesSearch = name.includes(query) || breed.includes(query);
-                const matchesGender = genderFilter === "all" || (p.gender && p.gender.toLowerCase() === genderFilter);
-                return matchesSearch && matchesGender;
-            });
+      <!-- PETS GRID -->
 
-            if (sortFilter === "price-asc") {
-                filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
-            } else if (sortFilter === "price-desc") {
-                filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
-            } else if (sortFilter === "age-asc") {
-                filtered.sort((a, b) => (a.tuoi || 0) - (b.tuoi || 0));
-            }
+      <div
+        class="pets-grid"
+        id="homePets">
 
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-20">
-                        <span class="text-5xl">🔍</span>
-                        <h3 class="text-lg font-bold text-slate-700 mt-4">Không tìm thấy thú cưng</h3>
-                    </div>`;
-                return;
-            }
+        <!-- API RENDER -->
 
-            filtered.forEach(pet => {
-                const isLiked = likedPets.includes(pet.id);
-                const heartClass = isLiked ? "fa-solid text-pink-500 scale-110" : "fa-regular text-slate-600";
-                
-                let badgeColor = "bg-emerald-50 text-emerald-700 border border-emerald-100";
-                if (pet.status === "Đang chờ") badgeColor = "bg-amber-50 text-amber-700 border border-amber-100";
-                if (pet.status === "Đã được nhận") badgeColor = "bg-slate-100 text-slate-500 border border-slate-200";
+      </div>
 
-                const isDisable = pet.status !== "Còn" ? "pointer-events-none bg-slate-200 text-slate-400" : "bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-600/15 text-white";
+    </div>
 
-                container.innerHTML += `
-                    <div class="bg-white rounded-[32px] overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-indigo-600/10 border border-slate-100/80 transition-all duration-500 flex flex-col group transform hover:-translate-y-3">
-                        <div class="relative overflow-hidden aspect-[4/3] bg-slate-100">
-                            <img src="${pet.hinhAnh}" alt="${pet.ten}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=400'">
-                            
-                            <div class="absolute top-4 left-4 flex gap-2">
-                                <span class="px-3.5 py-1.5 rounded-full text-xs font-bold ${badgeColor} shadow-md backdrop-blur-md">
-                                    ${pet.status}
-                                </span>
-                            </div>
+  </section>
 
-                            <button onclick="toggleLike('${pet.id}', event)" class="absolute top-4 right-4 bg-white/80 hover:bg-white text-slate-800 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 backdrop-blur-md">
-                                <i class="${heartClass} fa-heart"></i>
-                            </button>
+  <!-- TESTIMONIAL -->
 
-                            <div class="absolute bottom-4 right-4 bg-slate-900/85 text-white font-extrabold text-xs px-3.5 py-1.5 rounded-xl backdrop-blur-sm">
-                                Phí: $${pet.price || 0}
-                            </div>
-                        </div>
-                        <div class="p-6 flex flex-col flex-grow">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider ${pet.gender === 'female' ? 'bg-pink-50 text-pink-600' : 'bg-blue-50 text-blue-600'}">
-                                    ${pet.gender === 'female' ? '♀ Cái' : '♂ Đực'}
-                                </span>
-                                <span class="text-slate-400 text-xs font-semibold">${pet.age}</span>
-                            </div>
-                            <h3 class="text-xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors duration-300">${pet.ten}</h3>
-                            <p class="text-slate-500 text-sm font-semibold mt-1 mb-4">${pet.loai}</p>
-                            
-                            <button onclick='openModal(${JSON.stringify(pet)})' class="w-full mt-auto py-3.5 rounded-2xl font-bold shadow-md active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 ${isDisable}">
-                                ${pet.status === "Còn" ? '<i class="fa-solid fa-heart-crack"></i> Đăng Ký Nhận Nuôi' : 'Tạm khóa'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+  <section class="section">
 
-        function toggleLike(id, event) {
-            event.stopPropagation();
-            if (likedPets.includes(id)) {
-                likedPets = likedPets.filter(item => item !== id);
-                showToast("Đã bỏ yêu thích", "Cập nhật thành công!", "💔");
-            } else {
-                likedPets.push(id);
-                showToast("Đã yêu thích", "Cơ hội tìm mái ấm cho bé tăng cao!", "💖");
-            }
-            localStorage.setItem('liked', JSON.stringify(likedPets));
-            filterAndSort();
-        }
+    <div class="container">
 
-        function openModal(pet) {
-            const modal = document.getElementById('adopt-modal');
-            const inner = modal.querySelector('div');
+      <!-- TITLE -->
 
-            document.getElementById('modal-pet-id').value = pet.id;
-            document.getElementById('modal-pet-name').innerText = pet.ten;
-            document.getElementById('modal-pet-info').innerText = `${pet.gender === 'female' ? '♀ Bé Cái' : '♂ Bé Đực'} • ${pet.loai} • ${pet.age}`;
-            document.getElementById('modal-pet-desc').innerText = pet.description;
-            document.getElementById('modal-pet-img').src = pet.hinhAnh;
+      <div class="section-heading">
 
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                inner.classList.remove('scale-95');
-            }, 10);
-        }
+        <div>
 
-        function closeModal() {
-            const modal = document.getElementById('adopt-modal');
-            const inner = modal.querySelector('div');
-            modal.classList.add('opacity-0');
-            inner.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-            document.getElementById('adopt-form').reset();
-        }
+          <span class="badge">
 
-        async function submitForm(event) {
-            event.preventDefault();
-            const petId = document.getElementById('modal-pet-id').value;
-            const userName = document.getElementById('user-name').value;
-            const userPhone = document.getElementById('user-phone').value;
-            const submitBtn = document.getElementById('submit-btn');
+            💬 Đánh giá
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Đang kết nối server...';
+          </span>
 
-            try {
-                const targetLocalPet = allPets.find(p => p.id === petId);
-                const response = await fetch(API_URL, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        id: Number(targetLocalPet.id),
-                        name: targetLocalPet.ten,
-                        status: "pending",
-                        photoUrls: [targetLocalPet.hinhAnh],
-                        category: { id: 0, name: targetLocalPet.loai },
-                        tags: [{ id: 1, name: targetLocalPet.gender }]
-                    })
-                });
+          <h2 class="section-title">
 
-                if (!response.ok) throw new Error();
+            Những người đã nhận nuôi nói gì?
 
-                const requests = JSON.parse(localStorage.getItem('requests')) || [];
-                const pet = allPets.find(p => p.id === petId);
+          </h2>
 
-                requests.push({
-                    id: Date.now(),
-                    petId: petId,
-                    petName: pet.ten,
-                    userName: userName,
-                    userPhone: userPhone,
-                    status: "Chờ duyệt"
-                });
-                localStorage.setItem('requests', JSON.stringify(requests));
+        </div>
 
-                closeModal();
-                showToast("Gửi hồ sơ thành công!", `Yêu cầu nuôi bé ${pet.ten} đã lưu lên server.`, "🎉");
-                await fetchPets();
-            } catch (error) {
-                showToast("Thất bại", "Gặp sự cố kết nối server Swagger Petstore.", "❌");
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fa-solid fa-heart-circle-check"></i> Đăng Ký Nhận Nuôi';
-            }
-        }
+      </div>
 
-        function showToast(title, msg, icon = "✨") {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-icon').innerText = icon;
-            document.getElementById('toast-title').innerText = title;
-            document.getElementById('toast-msg').innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 4000);
-        }
+      <!-- GRID -->
 
-        document.addEventListener('DOMContentLoaded', fetchPets);
-    </script>
+      <div class="testimonial-grid">
+
+        <!-- CARD -->
+
+        <div class="card testimonial-card">
+
+          <div class="testimonial-user">
+
+            <img
+              src="https://randomuser.me/api/portraits/women/44.jpg">
+
+            <div>
+
+              <h4>
+                Ngọc Anh
+              </h4>
+
+              <span>
+                Hà Nội
+              </span>
+
+            </div>
+
+          </div>
+
+          <p>
+
+            “Nhờ PetAdopt mà mình đã tìm được
+            một người bạn cực kỳ đáng yêu.”
+
+          </p>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div class="card testimonial-card">
+
+          <div class="testimonial-user">
+
+            <img
+              src="https://randomuser.me/api/portraits/men/31.jpg">
+
+            <div>
+
+              <h4>
+                Minh Hoàng
+              </h4>
+
+              <span>
+                TP.HCM
+              </span>
+
+            </div>
+
+          </div>
+
+          <p>
+
+            “Giao diện rất chuyên nghiệp,
+            quy trình nhận nuôi cực kỳ dễ dàng.”
+
+          </p>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div class="card testimonial-card">
+
+          <div class="testimonial-user">
+
+            <img
+              src="https://randomuser.me/api/portraits/women/68.jpg">
+
+            <div>
+
+              <h4>
+                Thu Trang
+              </h4>
+
+              <span>
+                Đà Nẵng
+              </span>
+
+            </div>
+
+          </div>
+
+          <p>
+
+            “Mình đã nhận nuôi thành công
+            một bé mèo rất ngoan.”
+
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CTA -->
+
+  <section class="cta-section">
+
+    <div class="container cta-wrapper">
+
+      <h2>
+
+        Hãy cho các bé một mái ấm
+
+      </h2>
+
+      <p>
+
+        Một hành động nhỏ có thể thay đổi
+        cả cuộc đời của một thú cưng.
+
+      </p>
+
+      <a
+        href="pets.html"
+        class="btn btn-primary">
+
+        Khám phá thú cưng
+
+      </a>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+
+    <div class="container footer-grid">
+
+      <!-- ABOUT -->
+
+      <div>
+
+        <h2>
+          PetAdopt
+        </h2>
+
+        <p>
+
+          Nền tảng kết nối nhận nuôi
+          thú cưng chuyên nghiệp.
+
+        </p>
+
+      </div>
+
+      <!-- LINKS -->
+
+      <div>
+
+        <h3>
+          Khám phá
+        </h3>
+
+        <a href="pets.html">
+          Thú cưng
+        </a>
+
+        <a href="blog.html">
+          Tin tức
+        </a>
+
+        <a href="profile.html">
+          Hồ sơ
+        </a>
+
+      </div>
+
+      <!-- CONTACT -->
+
+      <div>
+
+        <h3>
+          Liên hệ
+        </h3>
+
+        <p>
+          support@petadopt.com
+        </p>
+
+        <p>
+          0123 456 789
+        </p>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+  <!-- TOAST -->
+
+  <div class="toast"></div>
+
+  <!-- ADMIN MODAL -->
+
+  <div
+    class="modal"
+    id="adminModal">
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content small-modal">
+
+      <!-- CLOSE -->
+
+      <button class="modal-close">
+
+        ✕
+
+      </button>
+
+      <h2>
+
+        Đăng nhập quản trị
+
+      </h2>
+
+      <p class="admin-note-text">
+
+        Tài khoản:
+        <b>admin</b>
+
+        <br>
+
+        Mật khẩu:
+        nhập bất kỳ
+
+      </p>
+
+      <!-- FORM -->
+
+      <form id="adminLoginForm">
+
+        <div class="input-group">
+
+          <label>
+
+            Tài khoản
+
+          </label>
+
+          <input
+            type="text"
+            id="adminUsername"
+            placeholder="Nhập tài khoản">
+
+        </div>
+
+        <div class="input-group">
+
+          <label>
+
+            Mật khẩu
+
+          </label>
+
+          <input
+            type="password"
+            id="adminPassword"
+            placeholder="Nhập mật khẩu">
+
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary">
+
+          Đăng nhập Admin
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <!-- JS -->
+
+  <script src="js/app.js"></script>
+
 </body>
+
 </html>

@@ -1,0 +1,274 @@
+<html lang="vi" data-theme="dark"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hồ sơ cá nhân - PetAdopt</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    /* CSS hỗ trợ hiển thị danh sách yêu thích mượt mà theo đúng layout gốc */
+    .favorite-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .favorite-item-left { display: flex; align-items: center; gap: 16px; }
+    .favorite-item-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+    .favorite-item-info h4 { margin: 0 0 4px 0; font-size: 16px; color: #1f2937; }
+    .favorite-item-info p { margin: 0; font-size: 14px; color: #6b7280; }
+    .btn-remove-fav {
+      background: #fee2e2; color: #ef4444; border: none; padding: 8px 16px;
+      border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: background 0.2s;
+    }
+    .btn-remove-fav:hover { background: #fca5a5; }
+    
+    .history-item-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px; background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 12px;
+    }
+    .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .status-pending { background: #fef3c7; color: #d97706; }
+    .status-approved { background: #d1fae5; color: #059669; }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="logo">🐾 PetAdopt</a>
+      <nav>
+        <a href="index.html">Trang chủ</a>
+        <a href="pets.html">Thú cưng</a>
+        <a href="history.html">Lịch sử</a>
+        <a href="blog.html">Tin tức</a>
+        <a href="profile.html" class="active">Hồ sơ</a>
+      </nav>
+      
+    </div>
+  </header>
+
+  <section class="section" style="padding-top: var(--spacing-xl);">
+    <div class="container">
+      <div class="profile-grid">
+        <div class="profile-left">
+
+          <div class="card profile-card">
+            <div class="card-header">
+              <h2>Thú cưng yêu thích</h2>
+            </div>
+            <div id="profileFavoritesList" style="margin-top: var(--spacing-md);"><p style="color: #6b7280; font-style: italic; padding: 12px 0;">Danh sách yêu thích trống. Hãy nhấn "Lưu" ở ngoài trang Thú cưng!</p></div>
+          </div>
+
+          <div class="card profile-card" style="margin-top: var(--spacing-xl);">
+            <div class="card-header">
+              <h2>Lịch sử nhận nuôi</h2>
+            </div>
+            <div id="profileHistoryList" style="margin-top: var(--spacing-md);">
+          <div class="history-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 12px;">
+            <div>
+              <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #1f2937; font-weight: 700;">Simba</h4>
+              <p style="margin: 0; font-size: 14px; color: #6b7280;">Đăng ký ngày: 27/05/2026</p>
+            </div>
+            <span class="status-badge" style="padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #fef3c7; color: #d97706;">Đang chờ</span>
+          </div>
+        
+          <div class="history-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 12px;">
+            <div>
+              <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #1f2937; font-weight: 700;">Rocky</h4>
+              <p style="margin: 0; font-size: 14px; color: #6b7280;">Đăng ký ngày: 27/05/2026</p>
+            </div>
+            <span class="status-badge" style="padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #fef3c7; color: #d97706;">Đang chờ</span>
+          </div>
+        
+          <div class="history-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 12px;">
+            <div>
+              <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #1f2937; font-weight: 700;">Bông</h4>
+              <p style="margin: 0; font-size: 14px; color: #6b7280;">Đăng ký ngày: 27/05/2026</p>
+            </div>
+            <span class="status-badge" style="padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #fef3c7; color: #d97706;">Đang chờ</span>
+          </div>
+        
+          <div class="history-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 12px;">
+            <div>
+              <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #1f2937; font-weight: 700;">Luna</h4>
+              <p style="margin: 0; font-size: 14px; color: #6b7280;">Đăng ký ngày: 27/05/2026</p>
+            </div>
+            <span class="status-badge" style="padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #fef3c7; color: #d97706;">Đang chờ</span>
+          </div>
+        
+          <div class="history-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 12px;">
+            <div>
+              <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #1f2937; font-weight: 700;">abc</h4>
+              <p style="margin: 0; font-size: 14px; color: #6b7280;">Đăng ký ngày: 27/05/2026</p>
+            </div>
+            <span class="status-badge" style="padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #fef3c7; color: #d97706;">Đang chờ</span>
+          </div>
+        
+          <div class="history-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 16px; background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 12px;">
+            <div>
+              <h4 style="margin: 0 0 4px 0; font-size: 16px; color: #1f2937; font-weight: 700;">abc</h4>
+              <p style="margin: 0; font-size: 14px; color: #6b7280;">Đăng ký ngày: 27/05/2026</p>
+            </div>
+            <span class="status-badge" style="padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: #fef3c7; color: #d97706;">Đang chờ</span>
+          </div>
+        </div>
+          </div>
+
+        </div>
+
+        <div class="profile-right">
+
+          <div class="card settings-card">
+            <div class="card-header">
+              <h2>Cài đặt</h2>
+            </div>
+            <div class="setting-item">
+              <div>
+                <h4>Thông báo email</h4>
+                <p>Nhận cập nhật hồ sơ qua email</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked="">
+                <span class="slider"></span>
+              </label>
+            </div>
+            
+          </div>
+
+          
+
+          <div class="card stats-card">
+            <h2>Thành tích</h2>
+            <div class="stats-mini-grid">
+              <div>
+                <h3 id="statApplications">6</h3>
+                <p>Hồ sơ</p>
+              </div>
+              <div>
+                <h3 id="statApproved">0</h3>
+                <p>Đã duyệt</p>
+              </div>
+              <div>
+                <h3 id="statFavorites">0</h3>
+                <p>Yêu thích</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h2>PetAdopt</h2>
+        <p>Nền tảng kết nối nhận nuôi thú cưng chuyên nghiệp.</p>
+      </div>
+      <div>
+        <h3>Điều hướng</h3>
+        <a href="pets.html">Thú cưng</a>
+        <a href="blog.html">Tin tức</a>
+        <a href="history.html">Lịch sử</a>
+      </div>
+      <div>
+        <h3>Liên hệ</h3>
+        <p>support@petadopt.com</p>
+        <p>0123 456 789</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast"></div>
+
+  <script src="js/app.js"></script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+<script src="js/main.js"></script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body></html>

@@ -1,0 +1,620 @@
+<!-- pets.html -->
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>
+    Danh sách thú cưng - PetAdopt
+  </title>
+
+  <!-- FONT -->
+
+  <link rel="preconnect"
+    href="https://fonts.googleapis.com">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="css/style.css">
+
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <header class="navbar">
+
+    <div class="container nav-wrapper">
+
+      <!-- LOGO -->
+
+      <a
+        href="index.html"
+        class="logo">
+
+        🐾 PetAdopt
+
+      </a>
+
+      <!-- MENU -->
+
+      <nav>
+
+        <a href="index.html">
+          Trang chủ
+        </a>
+
+        <a
+          href="pets.html"
+          class="active">
+
+          Thú cưng
+        </a>
+
+        <a href="history.html">
+          Lịch sử
+        </a>
+
+        <a href="blog.html">
+          Tin tức
+        </a>
+
+        <a href="profile.html">
+          Hồ sơ
+        </a>
+
+        <a
+          href="#"
+          id="openAdminModal">
+
+          Admin
+
+        </a>
+
+      </nav>
+
+      <!-- BUTTON -->
+
+      <a
+        href="pets.html"
+        class="btn btn-primary">
+
+        Nhận nuôi ngay
+
+      </a>
+
+    </div>
+
+  </header>
+
+  <!-- PAGE HEADER -->
+
+  <section class="page-header">
+
+    <div class="container">
+
+      <span class="badge">
+
+        🐾 Danh sách thú cưng
+
+      </span>
+
+      <h1>
+
+        Những bé đang tìm mái ấm
+
+      </h1>
+
+      <p>
+
+        Hãy tìm người bạn đồng hành
+        phù hợp với gia đình của bạn.
+
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- FILTER -->
+
+  <section class="section pt-0">
+
+    <div class="container">
+
+      <!-- FILTER BAR -->
+
+      <div class="filter-bar">
+
+        <!-- SEARCH -->
+
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Tìm kiếm tên thú cưng...">
+
+        <!-- SPECIES -->
+
+        <select id="speciesFilter">
+
+          <option value="">
+            Tất cả loài
+          </option>
+
+          <option value="dog">
+            Chó
+          </option>
+
+          <option value="cat">
+            Mèo
+          </option>
+
+        </select>
+
+        <!-- GENDER -->
+
+        <select id="genderFilter">
+
+          <option value="">
+            Giới tính
+          </option>
+
+          <option value="male">
+            Đực
+          </option>
+
+          <option value="female">
+            Cái
+          </option>
+
+        </select>
+
+        <!-- AGE -->
+
+        <select id="ageFilter">
+
+          <option value="">
+            Độ tuổi
+          </option>
+
+          <option value="young">
+            Dưới 1 tuổi
+          </option>
+
+          <option value="adult">
+            1 - 5 tuổi
+          </option>
+
+          <option value="old">
+            Trên 5 tuổi
+          </option>
+
+        </select>
+
+        <!-- SORT -->
+
+        <select id="sortFilter">
+
+          <option value="">
+            Sắp xếp
+          </option>
+
+          <option value="newest">
+            Mới nhất
+          </option>
+
+          <option value="youngest">
+            Nhỏ tuổi nhất
+          </option>
+
+          <option value="oldest">
+            Lớn tuổi nhất
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- PETS GRID -->
+
+      <div
+        class="pets-grid"
+        id="petsContainer">
+
+        <!-- API RENDER -->
+
+      </div>
+
+      <!-- LOAD MORE -->
+
+      <div class="load-more-wrapper">
+
+        <button
+          class="btn btn-outline"
+          id="loadMoreBtn">
+
+          Xem thêm
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PET MODAL -->
+
+  <div
+    class="modal"
+    id="petModal">
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content pet-modal">
+
+      <!-- CLOSE -->
+
+      <button class="modal-close">
+
+        ✕
+
+      </button>
+
+      <!-- MODAL GRID -->
+
+      <div class="pet-modal-grid">
+
+        <!-- IMAGE -->
+
+        <div class="pet-modal-image">
+
+          <img
+            id="modalPetImage"
+            src="">
+
+        </div>
+
+        <!-- INFO -->
+
+        <div class="pet-modal-info">
+
+          <!-- STATUS -->
+
+          <span
+            class="pet-status"
+            id="modalPetStatus">
+
+            🟢 Sẵn sàng nhận nuôi
+
+          </span>
+
+          <!-- NAME -->
+
+          <h2 id="modalPetName">
+
+            Bella
+
+          </h2>
+
+          <!-- META -->
+
+          <div class="pet-meta">
+
+            <span id="modalPetAge">
+
+              🎂 2 tuổi
+
+            </span>
+
+            <span id="modalPetGender">
+
+              ♀ Cái
+
+            </span>
+
+            <span id="modalPetSpecies">
+
+              🐶 Chó
+
+            </span>
+
+          </div>
+
+          <!-- DESCRIPTION -->
+
+          <div class="pet-description">
+
+            <h3>
+              Mô tả
+            </h3>
+
+            <p id="modalPetDescription">
+
+              Bé rất thân thiện và thích chơi đùa.
+
+            </p>
+
+          </div>
+
+          <!-- TAGS -->
+
+          <div class="pet-tags">
+
+            <span>
+              Thân thiện
+            </span>
+
+            <span>
+              Hoạt bát
+            </span>
+
+            <span>
+              Dễ chăm sóc
+            </span>
+
+            <span>
+              Thích trẻ em
+            </span>
+
+          </div>
+
+          <!-- HEALTH -->
+
+          <div class="pet-health">
+
+            <h3>
+              Tình trạng sức khỏe
+            </h3>
+
+            <ul>
+
+              <li>
+                ✔ Đã tiêm vaccine
+              </li>
+
+              <li>
+                ✔ Đã tẩy giun
+              </li>
+
+              <li>
+                ✔ Khỏe mạnh
+              </li>
+
+            </ul>
+
+          </div>
+
+          <!-- ACTIONS -->
+
+          <div class="pet-modal-actions">
+
+            <a
+              href="pet-detail.html"
+              class="btn btn-primary">
+
+              Xem chi tiết
+
+            </a>
+
+            <button
+              class="btn btn-outline"
+              id="saveFavoriteBtn">
+
+              ❤️ Lưu yêu thích
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+
+  <section class="cta-section">
+
+    <div class="container cta-wrapper">
+
+      <h2>
+
+        Hãy cho các bé một cơ hội mới
+
+      </h2>
+
+      <p>
+
+        Một mái ấm yêu thương
+        sẽ thay đổi cả cuộc đời của các bé.
+
+      </p>
+
+      <a
+        href="adoption.html"
+        class="btn btn-primary">
+
+        Đăng ký nhận nuôi
+
+      </a>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+
+    <div class="container footer-grid">
+
+      <!-- ABOUT -->
+
+      <div>
+
+        <h2>
+          PetAdopt
+        </h2>
+
+        <p>
+
+          Nền tảng kết nối nhận nuôi
+          thú cưng chuyên nghiệp.
+
+        </p>
+
+      </div>
+
+      <!-- LINKS -->
+
+      <div>
+
+        <h3>
+          Khám phá
+        </h3>
+
+        <a href="pets.html">
+          Thú cưng
+        </a>
+
+        <a href="blog.html">
+          Tin tức
+        </a>
+
+        <a href="profile.html">
+          Hồ sơ
+        </a>
+
+      </div>
+
+      <!-- CONTACT -->
+
+      <div>
+
+        <h3>
+          Liên hệ
+        </h3>
+
+        <p>
+          support@petadopt.com
+        </p>
+
+        <p>
+          0123 456 789
+        </p>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+  <!-- TOAST -->
+
+  <div class="toast"></div>
+
+  <!-- ADMIN LOGIN MODAL -->
+
+  <div
+    class="modal"
+    id="adminModal">
+
+    <div class="modal-overlay"></div>
+
+    <div class="modal-content small-modal">
+
+      <!-- CLOSE -->
+
+      <button class="modal-close">
+
+        ✕
+
+      </button>
+
+      <h2>
+
+        Đăng nhập quản trị
+
+      </h2>
+
+      <p class="admin-note-text">
+
+        Tài khoản:
+        <b>admin</b>
+
+        <br>
+
+        Mật khẩu:
+        nhập bất kỳ
+
+      </p>
+
+      <!-- FORM -->
+
+      <form id="adminLoginForm">
+
+        <div class="input-group">
+
+          <label>
+            Tài khoản
+          </label>
+
+          <input
+            type="text"
+            id="adminUsername"
+            placeholder="Nhập tài khoản">
+
+        </div>
+
+        <div class="input-group">
+
+          <label>
+            Mật khẩu
+          </label>
+
+          <input
+            type="password"
+            id="adminPassword"
+            placeholder="Nhập mật khẩu">
+
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary">
+
+          Đăng nhập Admin
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <!-- JS -->
+
+  <script src="js/app.js"></script>
+
+</body>
+
+</html>

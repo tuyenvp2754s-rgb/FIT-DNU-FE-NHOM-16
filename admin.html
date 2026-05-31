@@ -1,583 +1,305 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PetAdopt Panel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
-        }
-        .glowing-stats-card {
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .glowing-stats-card:hover {
-            box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.15);
-            border-color: rgba(99, 102, 241, 0.3);
-            transform: translateY(-2px);
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 6px;
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-        @keyframes blob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(40px, -60px) scale(1.15); }
-            66% { transform: translate(-30px, 30px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
-        .animate-blob {
-            animation: blob 16s infinite alternate;
-        }
-        .delay-2000 {
-            animation-delay: 3s;
-        }
-        .delay-4000 {
-            animation-delay: 6s;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>PetAdopt Admin Full</title>
+
+<style>
+:root{
+  --bg:#f3f4f6;
+  --sidebar:#111827;
+  --green:#10b981;
+}
+
+body{
+  margin:0;
+  font-family:sans-serif;
+  display:flex;
+  background:var(--bg);
+}
+
+/* LOGIN */
+#login{
+  position:fixed;
+  inset:0;
+  background:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.login-box{
+  padding:40px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  text-align:center;
+}
+
+input{
+  padding:10px;
+  margin:10px 0;
+  width:220px;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:260px;
+  height:100vh;
+  background:var(--sidebar);
+  color:white;
+  padding:20px;
+  position:fixed;
+}
+
+.sidebar h2{ color:var(--green); }
+
+.menu div{
+  padding:12px;
+  margin:8px 0;
+  cursor:pointer;
+  border-radius:8px;
+}
+
+.menu div:hover{ background:#1f2937; }
+
+/* MAIN */
+.main{
+  margin-left:260px;
+  padding:30px;
+  width:100%;
+}
+
+.hidden{ display:none; }
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+
+table{
+  width:100%;
+  background:white;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:12px;
+  border-bottom:1px solid #eee;
+}
+
+th{ background:#e5e7eb; }
+
+.btn{
+  padding:6px 12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.btn-add{ background:#10b981; color:white; }
+.btn-del{ background:#ef4444; color:white; }
+.btn-ok{ background:#3b82f6; color:white; }
+</style>
 </head>
-<body class="animated-bg min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
 
-    <div class="fixed top-20 left-10 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-    <div class="fixed top-40 right-10 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob delay-2000"></div>
-    <div class="fixed bottom-10 left-20 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-blob delay-4000"></div>
+<body>
 
-    <div id="login-container" class="flex-grow flex items-center justify-center relative z-10 px-4">
-        <div class="glass-panel max-w-md w-full p-8 rounded-[32px] shadow-2xl space-y-6">
-            <div class="text-center space-y-2">
-                <span class="text-4xl">🔐</span>
-                <h2 class="text-2xl font-extrabold text-slate-950 tracking-tight">Hệ thống quản trị</h2>
-                <p class="text-xs text-slate-500 font-medium">Vui lòng đăng nhập bằng tài khoản quản trị viên</p>
-            </div>
-            <form onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Tài khoản</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="text" id="username" required class="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Mật khẩu</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="password" id="password" required class="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                    </div>
-                </div>
-                <div id="login-error" class="hidden text-rose-500 text-xs font-semibold text-center bg-rose-50 py-2 rounded-xl border border-rose-100">
-                    Thông tin tài khoản không chính xác
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-indigo-600/10 transition-all flex items-center justify-center gap-2">
-                    Xác nhận đăng nhập
-                </button>
-                <div class="text-center">
-                    <a href="index.html" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold transition-colors">Quay lại trang chủ</a>
-                </div>
-            </form>
-        </div>
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-box">
+    <h2>Admin Login</h2>
+
+    <input id="username" placeholder="username">
+    <input id="password" type="password" placeholder="password">
+
+    <button onclick="login()" class="btn btn-add">Login</button>
+
+    <p id="error" style="color:red"></p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>🐾 PetAdopt</h2>
+
+    <div class="menu">
+      <div onclick="show('dashboard')">📊 Dashboard</div>
+      <div onclick="show('pets')">🐶 Pets</div>
+      <div onclick="show('adopt')">📋 Adoptions</div>
+      <div onclick="goHome()">🏠 Quay về trang chủ</div>
     </div>
+  </div>
 
-    <div id="dashboard-container" class="hidden flex-col min-h-screen relative z-10">
-        <nav class="bg-white/85 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200 shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-20">
-                    <div class="flex items-center space-x-3">
-                        <span class="text-3xl">🛡️</span>
-                        <span class="font-extrabold text-xl text-slate-900 tracking-tight">Console PetAdopt</span>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <span id="api-status" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100 animate-pulse"></span>
-                        <a href="index.html" class="bg-slate-100 hover:bg-slate-200 text-slate-800 px-5 py-2.5 rounded-2xl font-bold text-sm flex items-center gap-2 transition-all duration-300">
-                            <i class="fa-solid fa-arrow-left"></i> Trang khách
-                        </a>
-                        <button onclick="handleLogout()" class="bg-rose-500 hover:bg-rose-600 text-white px-5 py-2.5 rounded-2xl font-bold text-sm flex items-center gap-2 transition-all duration-300 active:scale-95">
-                            <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </nav>
+  <!-- MAIN -->
+  <div class="main">
 
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-3xl glowing-stats-card flex items-center gap-5">
-                    <div class="p-4 bg-indigo-50 text-indigo-600 rounded-2xl shadow-inner"><i class="fa-solid fa-cloud-arrow-down fa-2x"></i></div>
-                    <div>
-                        <p class="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">Tổng trên API Cloud</p>
-                        <p id="stat-total" class="text-3xl font-black text-slate-900 mt-1">0</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-3xl glowing-stats-card flex items-center gap-5">
-                    <div class="p-4 bg-amber-50 text-amber-600 rounded-2xl shadow-inner"><i class="fa-solid fa-clock-rotate-left fa-2x"></i></div>
-                    <div>
-                        <p class="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">Hồ sơ chờ duyệt</p>
-                        <p id="stat-pending" class="text-3xl font-black text-slate-900 mt-1">0</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-3xl glowing-stats-card flex items-center gap-5">
-                    <div class="p-4 bg-emerald-50 text-emerald-600 rounded-2xl shadow-inner"><i class="fa-solid fa-square-check fa-2x"></i></div>
-                    <div>
-                        <p class="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">Đã hoàn thành</p>
-                        <p id="stat-adopted" class="text-3xl font-black text-slate-900 mt-1">0</p>
-                    </div>
-                </div>
-            </div>
+    <section id="dashboard">
+      <h1>Dashboard</h1>
+      <div class="card" id="stat">Loading...</div>
+    </section>
 
-            <div class="bg-white rounded-[32px] border border-slate-200/70 shadow-sm overflow-hidden p-6">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-xl font-extrabold text-slate-900">Quản trị danh sách trên Mock API</h2>
-                    <button onclick="openPetModal()" class="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold px-4 py-2.5 rounded-2xl text-sm flex items-center gap-2 shadow-lg shadow-indigo-600/10 transition-all duration-300">
-                        <i class="fa-solid fa-plus-circle"></i> Thêm Thú Cưng
-                    </button>
-                </div>
-                <div class="overflow-x-auto custom-scrollbar">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-slate-100 text-slate-400 text-xs font-extrabold uppercase tracking-wider">
-                                <th class="py-4 px-6">Ảnh minh họa</th>
-                                <th class="py-4 px-6">Họ tên</th>
-                                <th class="py-4 px-6">Thông số</th>
-                                <th class="py-4 px-6">Giới tính / Phí</th>
-                                <th class="py-4 px-6">Trạng thái</th>
-                                <th class="py-4 px-6 text-right">Tác vụ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pet-table-body" class="divide-y divide-slate-100 text-sm font-semibold"></tbody>
-                    </table>
-                </div>
-            </div>
+    <section id="pets" class="hidden">
+      <h1>Pets</h1>
 
-            <div class="bg-white rounded-[32px] border border-slate-200/70 shadow-sm p-6">
-                <h2 class="text-xl font-extrabold text-slate-900 mb-6">Quản trị yêu cầu hồ sơ (Local Storage)</h2>
-                <div class="overflow-x-auto custom-scrollbar">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-slate-100 text-slate-400 text-xs font-extrabold uppercase tracking-wider">
-                                <th class="py-4 px-6">Người xin nuôi</th>
-                                <th class="py-4 px-6">Số điện thoại</th>
-                                <th class="py-4 px-6">Đăng ký bé</th>
-                                <th class="py-4 px-6">Trạng thái</th>
-                                <th class="py-4 px-6 text-right">Phản hồi hồ sơ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="req-table-body" class="divide-y divide-slate-100 text-sm font-semibold"></tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
+      <div class="card">
+        <input id="petName" placeholder="Tên thú cưng">
+        <button class="btn btn-add" onclick="addPet()">+ Thêm</button>
+      </div>
 
-        <footer class="bg-white/60 border-t border-slate-200/50 py-8 text-center text-sm text-slate-500 mt-12">
-            <p>© 2026 PetAdopt High-End. Swagger Petstore Synchronized.</p>
-        </footer>
-    </div>
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Action</th></tr>
+        </thead>
+        <tbody id="petTable"></tbody>
+      </table>
+    </section>
 
-    <div id="pet-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-[32px] max-w-lg w-full mx-4 p-8 shadow-2xl transform scale-95 transition-transform duration-300">
-            <div class="flex items-center justify-between mb-6">
-                <h3 id="modal-title" class="text-2xl font-extrabold text-slate-900"></h3>
-                <button onclick="closePetModal()" class="text-slate-400 hover:text-slate-600 transition-colors"><i class="fa-solid fa-times text-xl"></i></button>
-            </div>
-            <form id="pet-form" onsubmit="savePet(event)" class="space-y-4">
-                <input type="hidden" id="pet-db-id">
-                <input type="hidden" id="pet-id-field">
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Tên thú cưng</label>
-                    <input type="text" id="pet-name" required class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Giới tính</label>
-                        <select id="pet-gender" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                            <option value="male">Đực</option>
-                            <option value="female">Cái</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Tuổi (Tháng)</label>
-                        <input type="number" id="pet-age" required class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Giống loài</label>
-                        <input type="text" id="pet-breed" required class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Phí nuôi ($)</label>
-                        <input type="number" id="pet-price" required class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Đường dẫn ảnh (URL)</label>
-                    <input type="url" id="pet-image" required class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Trạng thái hiện tại</label>
-                    <select id="pet-status" class="w-full border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <option value="Còn">Còn</option>
-                        <option value="Đang chờ">Đang chờ</option>
-                        <option value="Đã được nhận">Đã được nhận</option>
-                    </select>
-                </div>
-                <button id="save-btn" type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:brightness-110 text-white font-bold py-3.5 rounded-2xl shadow-lg transition-all mt-2 flex items-center justify-center gap-2">
-                    Lưu dữ liệu lên Mock API
-                </button>
-            </form>
-        </div>
-    </div>
+    <section id="adopt" class="hidden">
+      <h1>Adoptions</h1>
 
-    <script>
-        const API_URL = 'https://petstore.swagger.io/v2/pet';
-        let allPets = [];
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Pet</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="adTable"></tbody>
+      </table>
+    </section>
 
-        const fallbackImages = [
-            "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=500",
-            "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=500",
-            "https://images.unsplash.com/photo-1537151625747-7ae85c0a27d6?q=80&w=500",
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=500",
-            "https://images.unsplash.com/photo-1534361960057-19889db9621e?q=80&w=500",
-            "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=500",
-            "https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=500",
-            "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=500",
-            "https://images.unsplash.com/photo-1517423568366-8b83523034fd?q=80&w=500",
-            "https://images.unsplash.com/photo-1513360309081-36f5e878fc11?q=80&w=500",
-            "https://images.unsplash.com/photo-1561037404-61cd46aa615b?q=80&w=500",
-            "https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?q=80&w=500",
-            "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?q=80&w=500",
-            "https://images.unsplash.com/photo-1507146426996-ef05306b995a?q=80&w=500",
-            "https://images.unsplash.com/photo-1611003228941-98852ba62227?q=80&w=500"
-        ];
+  </div>
+</div>
 
-        const fallbackNames = [
-            "Bánh Bao", "Mochi", "Hạt Dẻ", "Mây", "Sữa", "Đậu Phộng", "Cá Hồi", 
-            "Kem", "Bông", "Kiki", "Milo", "Luna", "Coco", "Chiko", "Xuka", "Nôbita",
-            "Mít", "Bơ", "Xoài", "Đu Đủ", "Khoai Tây", "Củ Cải", "Hành Tây", "Đậu Đỏ"
-        ];
+<script>
 
-        const fallbackBreeds = [
-            "Chó Samoyed", "Chó Poodle", "Phốc Sóc", "Chó Corgi", "Golden Retriever", "Shiba Inu", 
-            "Husky Sibir", "Mèo Anh Lông Ngắn", "Mèo Ba Tư", "Mèo Munchkin", "Pug"
-        ];
+const API_PETS = "https://6a0d322e769682b8ee75c462.mockapi.io/api/v1/pets";
+const API_ADS  = "https://6a0d322e769682b8ee75c462.mockapi.io/api/v1/adoptions";
 
-        const safeString = (val) => {
-            if (val === null || val === undefined) return "";
-            if (typeof val === "object") return "";
-            return String(val).trim();
-        };
+/* LOGIN FIX CHUẨN */
+function login(){
 
-        const mapStatusToUI = (status) => {
-            if (status === "available") return "Còn";
-            if (status === "pending") return "Đang chờ";
-            if (status === "sold") return "Đã được nhận";
-            return "Còn";
-        };
+  const u = document.getElementById("username").value.trim();
+  const p = document.getElementById("password").value.trim();
 
-        const mapStatusToAPI = (status) => {
-            if (status === "Còn") return "available";
-            if (status === "Đang chờ") return "pending";
-            if (status === "Đã được nhận") return "sold";
-            return "available";
-        };
+  const err = document.getElementById("error");
 
-        const mapPetToUI = (pet) => {
-            const numId = Math.abs(Number(pet.id || 0)) || Date.now();
-            
-            const rawName = safeString(pet.name);
-            const isInvalidName = !rawName || rawName === "doggie" || rawName === "hello kity" || rawName === "string" || rawName.toLowerCase().includes("test");
-            const finalName = isInvalidName ? fallbackNames[numId % fallbackNames.length] : rawName;
+  if(u === "admin" && p === "admin"){
+    document.getElementById("login").style.display = "none";
+    document.getElementById("app").classList.remove("hidden");
 
-            const rawBreed = pet.category ? safeString(pet.category.name) : "";
-            const isInvalidBreed = !rawBreed || rawBreed === "string" || rawBreed.toLowerCase().includes("test");
-            const finalBreed = isInvalidBreed ? fallbackBreeds[numId % fallbackBreeds.length] : rawBreed;
+    load();
+    setInterval(load, 8000);
+  } else {
+    err.innerText = "Sai tài khoản hoặc mật khẩu";
+  }
+}
 
-            const rawPhoto = pet.photoUrls && pet.photoUrls[0] ? safeString(pet.photoUrls[0]) : "";
-            const isInvalidPhoto = !rawPhoto || !rawPhoto.startsWith("http");
-            const finalPhoto = isInvalidPhoto ? fallbackImages[numId % fallbackImages.length] : rawPhoto;
+/* NAV */
+function show(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
 
-            const rawTag = pet.tags && pet.tags[0] ? safeString(pet.tags[0].name) : "";
-            const finalGender = (rawTag && rawTag !== "string") ? rawTag : (numId % 2 === 0 ? "female" : "male");
+/* BACK HOME */
+function goHome(){
+  window.location.href = "index.html";
+}
 
-            return {
-                id: String(pet.id),
-                ten: finalName,
-                loai: finalBreed,
-                breed: finalBreed,
-                age: `${(numId % 18) + 3} tháng`,
-                tuoi: (numId % 18) + 3,
-                hinhAnh: finalPhoto,
-                gender: finalGender,
-                price: (numId % 80) + 15,
-                status: mapStatusToUI(pet.status)
-            };
-        };
+/* LOAD DATA */
+async function load(){
 
-        function checkAuth() {
-            const loggedIn = localStorage.getItem('adminLoggedIn');
-            const loginBox = document.getElementById('login-container');
-            const dashboardBox = document.getElementById('dashboard-container');
+  try{
 
-            if (loggedIn === 'true') {
-                loginBox.classList.add('hidden');
-                dashboardBox.classList.remove('hidden');
-                dashboardBox.classList.add('flex');
-                fetchAdminData();
-            } else {
-                loginBox.classList.remove('hidden');
-                dashboardBox.classList.add('hidden');
-                dashboardBox.classList.remove('flex');
+    const [pets, ads] = await Promise.all([
+      fetch(API_PETS).then(r=>r.json()),
+      fetch(API_ADS).then(r=>r.json())
+    ]);
+
+    document.getElementById("stat").innerHTML = `
+      🐶 Pets: ${pets.length} <br>
+      📋 Ads: ${ads.length} <br>
+      🟡 Pending: ${ads.filter(a=>a.status==="pending").length} <br>
+      🟢 Approved: ${ads.filter(a=>a.status==="approved").length}
+    `;
+
+    document.getElementById("petTable").innerHTML =
+      pets.map(p=>`
+        <tr>
+          <td>${p.id}</td>
+          <td>${p.name}</td>
+          <td><button class="btn btn-del" onclick="delPet('${p.id}')">Xóa</button></td>
+        </tr>
+      `).join("");
+
+    document.getElementById("adTable").innerHTML =
+      ads.map(a=>`
+        <tr>
+          <td>${a.name || "User"}</td>
+          <td>${a.petName || "Pet"}</td>
+          <td>${badge(a.status)}</td>
+          <td>
+            ${
+              a.status === "approved"
+              ? "✅"
+              : `<button class="btn btn-ok" onclick="approve('${a.id}')">Duyệt</button>`
             }
-        }
+          </td>
+        </tr>
+      `).join("");
 
-        function handleLogin(event) {
-            event.preventDefault();
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-            const errorMsg = document.getElementById('login-error');
+  } catch(e){
+    console.log("API error", e);
+  }
+}
 
-            if (user === 'dnu123' && pass === 'dnu123') {
-                errorMsg.classList.add('hidden');
-                localStorage.setItem('adminLoggedIn', 'true');
-                checkAuth();
-            } else {
-                errorMsg.classList.remove('hidden');
-            }
-        }
+/* STATUS */
+function badge(s){
+  if(s==="approved") return "🟢 approved";
+  if(s==="rejected") return "🔴 rejected";
+  return "🟡 pending";
+}
 
-        function handleLogout() {
-            localStorage.setItem('adminLoggedIn', 'false');
-            checkAuth();
-        }
+/* PET */
+async function addPet(){
+  const name = document.getElementById("petName").value.trim();
+  if(!name) return;
 
-        async function fetchAdminData() {
-            const apiStatus = document.getElementById('api-status');
-            try {
-                const response = await fetch(`${API_URL}/findByStatus?status=available,pending,sold`);
-                if (!response.ok) throw new Error();
-                const rawPets = await response.json();
+  await fetch(API_PETS,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({name})
+  });
 
-                allPets = rawPets.filter(p => p && p.id).slice(0, 100).map(mapPetToUI);
+  document.getElementById("petName").value="";
+  load();
+}
 
-                apiStatus.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100 animate-pulse";
-                apiStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Trực tuyến';
-                
-                renderAdminDashboard();
-            } catch (error) {
-                apiStatus.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-100";
-                apiStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Ngoại tuyến';
-            }
-        }
+async function delPet(id){
+  await fetch(`${API_PETS}/${id}`,{method:"DELETE"});
+  load();
+}
 
-        function renderAdminDashboard() {
-            const requests = JSON.parse(localStorage.getItem('requests')) || [];
+/* ADOPTION */
+async function approve(id){
+  await fetch(`${API_ADS}/${id}`,{
+    method:"PUT",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({status:"approved"})
+  });
 
-            document.getElementById('stat-total').innerText = allPets.length;
-            document.getElementById('stat-pending').innerText = requests.filter(r => r.status === "Chờ duyệt").length;
-            document.getElementById('stat-adopted').innerText = allPets.filter(p => p.status === "Đã được nhận").length;
+  load();
+}
 
-            const petBody = document.getElementById('pet-table-body');
-            petBody.innerHTML = '';
-            allPets.forEach(pet => {
-                let badgeColor = "bg-emerald-50 text-emerald-700 border border-emerald-100";
-                if (pet.status === "Đang chờ") badgeColor = "bg-amber-50 text-amber-700 border border-amber-100";
-                if (pet.status === "Đã được nhận") badgeColor = "bg-slate-100 text-slate-500 border border-slate-200";
+</script>
 
-                petBody.innerHTML += `
-                    <tr class="hover:bg-slate-50/50 transition-colors">
-                        <td class="py-4 px-6"><img src="${pet.hinhAnh}" class="w-14 h-14 rounded-2xl object-cover border border-slate-100 shadow-sm" onerror="this.src='https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=400'"></td>
-                        <td class="py-4 px-6 text-slate-900 font-bold">${pet.ten}</td>
-                        <td class="py-4 px-6 text-slate-500">${pet.loai} (${pet.tuoi} tháng)</td>
-                        <td class="py-4 px-6">
-                            <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider ${pet.gender === 'female' ? 'bg-pink-50 text-pink-600' : 'bg-blue-50 text-blue-600'}">
-                                ${pet.gender === 'female' ? '♀ Cái' : '♂ Đực'}
-                            </span>
-                            <span class="text-slate-800 ml-2 font-bold">$${pet.price || 0}</span>
-                        </td>
-                        <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-bold ${badgeColor}">${pet.status}</span></td>
-                        <td class="py-4 px-6 text-right space-x-3">
-                            <button onclick="editPet('${pet.id}')" class="text-indigo-600 hover:text-indigo-800 transition-all"><i class="fa-solid fa-edit"></i> Sửa</button>
-                            <button onclick="deletePet('${pet.id}')" class="text-rose-600 hover:text-rose-800 transition-all"><i class="fa-solid fa-trash-can"></i> Xóa</button>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            const reqBody = document.getElementById('req-table-body');
-            reqBody.innerHTML = '';
-            requests.forEach(req => {
-                let reqBadge = "bg-amber-50 text-amber-700 border border-amber-100";
-                if (req.status === "Đồng ý") reqBadge = "bg-emerald-50 text-emerald-700 border border-emerald-100";
-                if (req.status === "Từ chối") reqBadge = "bg-rose-50 text-rose-700 border border-rose-100";
-
-                const isProcessed = req.status !== "Chờ duyệt" ? "hidden" : "";
-
-                reqBody.innerHTML += `
-                    <tr class="hover:bg-slate-50/50 transition-colors">
-                        <td class="py-4 px-6 text-slate-900 font-bold">${req.userName}</td>
-                        <td class="py-4 px-6 text-slate-500">${req.userPhone}</td>
-                        <td class="py-4 px-6 text-indigo-600 font-bold">${req.petName}</td>
-                        <td class="py-4 px-6"><span class="px-3 py-1 rounded-full text-xs font-bold ${reqBadge}">${req.status}</span></td>
-                        <td class="py-4 px-6 text-right space-x-2">
-                            <button onclick="processRequest(${req.id}, '${req.petId}', 'Đồng ý')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${isProcessed}"><i class="fa-solid fa-check"></i> Duyệt hồ sơ</button>
-                            <button onclick="processRequest(${req.id}, '${req.petId}', 'Từ chối')" class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${isProcessed}"><i class="fa-solid fa-xmark"></i> Hủy</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function openPetModal() {
-            const modal = document.getElementById('pet-modal');
-            const inner = modal.querySelector('div');
-            document.getElementById('modal-title').innerText = "Thêm Bé Thú Cưng";
-            document.getElementById('pet-form').reset();
-            document.getElementById('pet-db-id').value = '';
-            document.getElementById('pet-id-field').value = '';
-            modal.classList.remove('hidden');
-            setTimeout(() => { modal.classList.remove('opacity-0'); inner.classList.remove('scale-95'); }, 10);
-        }
-
-        function closePetModal() {
-            const modal = document.getElementById('pet-modal');
-            const inner = modal.querySelector('div');
-            modal.classList.add('opacity-0');
-            inner.classList.add('scale-95');
-            setTimeout(() => { modal.classList.add('hidden'); }, 300);
-        }
-
-        async function savePet(event) {
-            event.preventDefault();
-            const dbId = document.getElementById('pet-db-id').value;
-            const petIdField = document.getElementById('pet-id-field').value;
-            const saveBtn = document.getElementById('save-btn');
-
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="fa-solid fa-circle-notch animate-spin"></i> Đang ghi dữ liệu...';
-
-            const payload = {
-                id: dbId ? Number(dbId) : Date.now(),
-                name: document.getElementById('pet-name').value,
-                status: mapStatusToAPI(document.getElementById('pet-status').value),
-                photoUrls: [document.getElementById('pet-image').value],
-                category: { id: 0, name: document.getElementById('pet-breed').value },
-                tags: [{ id: 1, name: document.getElementById('pet-gender').value }]
-            };
-
-            try {
-                let response;
-                if (dbId) {
-                    response = await fetch(API_URL, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                } else {
-                    response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                }
-
-                if (!response.ok) throw new Error();
-                
-                closePetModal();
-                await fetchAdminData();
-            } catch (error) {
-                alert("Không thể truyền thông tin lên server Swagger Petstore.");
-            } finally {
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = 'Lưu dữ liệu lên Mock API';
-            }
-        }
-
-        function editPet(id) {
-            const pet = allPets.find(p => p.id === String(id));
-            if (!pet) return;
-            openPetModal();
-            document.getElementById('modal-title').innerText = "Cập Nhật Thông Tin";
-            document.getElementById('pet-db-id').value = pet.id;
-            document.getElementById('pet-id-field').value = pet.id;
-            document.getElementById('pet-name').value = pet.ten;
-            document.getElementById('pet-gender').value = pet.gender;
-            document.getElementById('pet-age').value = pet.tuoi;
-            document.getElementById('pet-breed').value = pet.loai;
-            document.getElementById('pet-price').value = pet.price;
-            document.getElementById('pet-image').value = pet.hinhAnh;
-            document.getElementById('pet-status').value = pet.status;
-        }
-
-        async function deletePet(dbId) {
-            if (confirm("Xóa hoàn toàn thông tin thú cưng khỏi Swagger Petstore?")) {
-                try {
-                    const response = await fetch(`${API_URL}/${dbId}`, {
-                        method: 'DELETE',
-                        headers: { 'api_key': 'special-key' }
-                    });
-                    if (!response.ok) throw new Error();
-                    await fetchAdminData();
-                } catch (error) {
-                    alert("Gặp sự cố khi thực hiện lệnh DELETE.");
-                }
-            }
-        }
-
-        async function processRequest(reqId, petId, status) {
-            const requests = JSON.parse(localStorage.getItem('requests')) || [];
-            const req = requests.find(r => r.id === reqId);
-
-            if (req) {
-                try {
-                    const targetPet = allPets.find(p => String(p.id) === String(petId));
-                    if (!targetPet) throw new Error("Thú cưng không tồn tại trên Swagger Petstore.");
-                    
-                    const newStatus = status === "Đồng ý" ? "sold" : "available";
-                    
-                    const response = await fetch(API_URL, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            id: Number(targetPet.id),
-                            name: targetPet.ten,
-                            status: newStatus,
-                            photoUrls: [targetPet.hinhAnh],
-                            category: { id: 0, name: targetPet.loai },
-                            tags: [{ id: 1, name: targetPet.gender }]
-                        })
-                    });
-
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-                    req.status = status;
-                    localStorage.setItem('requests', JSON.stringify(requests));
-                    
-                    await fetchAdminData();
-                } catch (error) {
-                    console.error("Lỗi duyệt hồ sơ:", error);
-                    alert("Duyệt hồ sơ thất bại: " + error.message);
-                }
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', checkAuth);
-    </script>
 </body>
 </html>
