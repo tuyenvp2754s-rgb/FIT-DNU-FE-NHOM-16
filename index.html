@@ -1,718 +1,383 @@
 <!-- index.html -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta charset="UTF-8">
+    <title>PetAdopt Professional</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
+    <!-- FONT -->
 
-  <title>
-    PetAdopt Professional
-  </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
 
-  <!-- FONT -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
-  <link rel="preconnect"
-    href="https://fonts.googleapis.com">
+    <!-- CSS -->
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-  <!-- CSS -->
+  <body>
+    <!-- NAVBAR -->
 
-  <link
-    rel="stylesheet"
-    href="css/style.css">
+    <header class="navbar">
+      <div class="container nav-wrapper">
+        <!-- LOGO -->
 
-</head>
+        <a href="index.html" class="logo"> 🐾 PetAdopt </a>
 
-<body>
+        <!-- MENU -->
 
-  <!-- NAVBAR -->
+        <nav>
+          <a href="index.html" class="active"> Trang chủ </a>
 
-  <header class="navbar">
+          <a href="pets.html"> Thú cưng </a>
 
-    <div class="container nav-wrapper">
+          <a href="history.html"> Lịch sử </a>
 
-      <!-- LOGO -->
+          <a href="blog.html"> Tin tức </a>
 
-      <a
-        href="index.html"
-        class="logo">
+          <a href="profile.html"> Hồ sơ </a>
 
-        🐾 PetAdopt
+          <a href="#" id="openAdminModal">Admin</a>
+        </nav>
 
-      </a>
+        <!-- BUTTON -->
 
-      <!-- MENU -->
-
-      <nav>
-
-        <a
-          href="index.html"
-          class="active">
-
-          Trang chủ
-
-        </a>
-
-        <a href="pets.html">
-          Thú cưng
-        </a>
-
-        <a href="history.html">
-          Lịch sử
-        </a>
-
-        <a href="blog.html">
-          Tin tức
-        </a>
-
-        <a href="profile.html">
-          Hồ sơ
-        </a>
-
-        <a href="admin.html">Admin</a>
-      </nav>
-
-      <!-- BUTTON -->
-
-      <a
-        href="pets.html"
-        class="btn btn-primary">
-
-        Nhận nuôi ngay
-
-      </a>
-
-    </div>
-
-  </header>
-
-  <!-- HERO -->
-
-  <section class="hero">
-
-    <div class="container hero-wrapper">
-
-      <!-- LEFT -->
-
-      <div class="hero-content">
-
-        <span class="badge">
-
-          🐶 Nền tảng nhận nuôi thú cưng
-
-        </span>
-
-        <h1>
-
-          Mọi thú cưng đều xứng đáng
-          có một mái ấm yêu thương
-
-        </h1>
-
-        <p>
-
-          PetAdopt Professional giúp kết nối
-          các thú cưng đang cần cứu hộ
-          với những gia đình yêu thương thật sự.
-
-        </p>
-
-        <!-- BUTTONS -->
-
-        <div class="hero-buttons">
-
-          <a
-            href="pets.html"
-            class="btn btn-primary">
-
-            Nhận nuôi ngay
-
-          </a>
-
-          <button class="btn btn-outline">
-
-            Trở thành tình nguyện viên
-
-          </button>
-
-        </div>
-
+        <a href="pets.html" class="btn btn-primary"> Nhận nuôi ngay </a>
       </div>
+    </header>
 
-      <!-- RIGHT -->
+    <!-- HERO -->
 
-      <div class="hero-image">
+    <section class="hero">
+      <div class="container hero-wrapper">
+        <!-- LEFT -->
 
-        <img
-          src="https://images.unsplash.com/photo-1517849845537-4d257902454a">
+        <div class="hero-content">
+          <span class="badge"> 🐶 Nền tảng nhận nuôi thú cưng </span>
 
-        <!-- FLOATING CARD -->
-
-        <div class="floating-card float-1">
-
-          ❤️ 2,500+ thú cưng
-          đã được nhận nuôi
-
-        </div>
-
-        <div class="floating-card float-2">
-
-          🏠 1,200+ gia đình hạnh phúc
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- STATS -->
-
-  <section class="section">
-
-    <div class="container">
-
-      <div class="stats-grid">
-
-        <!-- CARD -->
-
-        <div class="card stat-card">
-
-          <h2>2500+</h2>
+          <h1>Mọi thú cưng đều xứng đáng có một mái ấm yêu thương</h1>
 
           <p>
-            Thú cưng đã được nhận nuôi
+            PetAdopt Professional giúp kết nối các thú cưng đang cần cứu hộ với
+            những gia đình yêu thương thật sự.
           </p>
 
+          <!-- BUTTONS -->
+
+          <div class="hero-buttons">
+            <a href="pets.html" class="btn btn-primary"> Nhận nuôi ngay </a>
+
+            <button class="btn btn-outline">Trở thành tình nguyện viên</button>
+          </div>
         </div>
 
-        <!-- CARD -->
+        <!-- RIGHT -->
 
-        <div class="card stat-card">
+        <div class="hero-image">
+          <img
+            src="https://images.unsplash.com/photo-1517849845537-4d257902454a"
+          />
 
-          <h2>1200+</h2>
+          <!-- FLOATING CARD -->
 
-          <p>
-            Gia đình hạnh phúc
-          </p>
-
-        </div>
-
-        <!-- CARD -->
-
-        <div class="card stat-card">
-
-          <h2>85+</h2>
-
-          <p>
-            Trạm cứu hộ hợp tác
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- PROCESS -->
-
-  <section class="section">
-
-    <div class="container">
-
-      <!-- HEADING -->
-
-      <div class="section-heading">
-
-        <div>
-
-          <span class="badge">
-
-            Quy trình nhận nuôi
-
-          </span>
-
-          <h2 class="section-title">
-
-            Chỉ với 3 bước đơn giản
-
-          </h2>
-
-        </div>
-
-      </div>
-
-      <!-- STEPS -->
-
-      <div class="steps-grid">
-
-        <!-- STEP -->
-
-        <div class="card step-card">
-
-          <div class="step-number">
-
-            01
-
+          <div class="floating-card float-1">
+            ❤️ 2,500+ thú cưng đã được nhận nuôi
           </div>
 
-          <h3>
-
-            Chọn thú cưng
-
-          </h3>
-
-          <p>
-
-            Tìm kiếm thú cưng phù hợp
-            với gia đình và sở thích của bạn.
-
-          </p>
-
+          <div class="floating-card float-2">🏠 1,200+ gia đình hạnh phúc</div>
         </div>
+      </div>
+    </section>
 
-        <!-- STEP -->
+    <!-- STATS -->
 
-        <div class="card step-card">
+    <section class="section">
+      <div class="container">
+        <div class="stats-grid">
+          <!-- CARD -->
 
-          <div class="step-number">
+          <div class="card stat-card">
+            <h2>2500+</h2>
 
-            02
-
+            <p>Thú cưng đã được nhận nuôi</p>
           </div>
 
-          <h3>
+          <!-- CARD -->
 
-            Gửi đơn đăng ký
+          <div class="card stat-card">
+            <h2>1200+</h2>
 
-          </h3>
-
-          <p>
-
-            Điền thông tin cá nhân và
-            điều kiện chăm sóc thú cưng.
-
-          </p>
-
-        </div>
-
-        <!-- STEP -->
-
-        <div class="card step-card">
-
-          <div class="step-number">
-
-            03
-
+            <p>Gia đình hạnh phúc</p>
           </div>
 
-          <h3>
+          <!-- CARD -->
 
-            Đón bé về nhà
+          <div class="card stat-card">
+            <h2>85+</h2>
 
-          </h3>
+            <p>Trạm cứu hộ hợp tác</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <p>
+    <!-- PROCESS -->
 
-            Hoàn tất thủ tục và
-            chào đón thành viên mới.
+    <section class="section">
+      <div class="container">
+        <!-- HEADING -->
 
-          </p>
+        <div class="section-heading">
+          <div>
+            <span class="badge"> Quy trình nhận nuôi </span>
 
+            <h2 class="section-title">Chỉ với 3 bước đơn giản</h2>
+          </div>
         </div>
 
+        <!-- STEPS -->
+
+        <div class="steps-grid">
+          <!-- STEP -->
+
+          <div class="card step-card">
+            <div class="step-number">01</div>
+
+            <h3>Chọn thú cưng</h3>
+
+            <p>Tìm kiếm thú cưng phù hợp với gia đình và sở thích của bạn.</p>
+          </div>
+
+          <!-- STEP -->
+
+          <div class="card step-card">
+            <div class="step-number">02</div>
+
+            <h3>Gửi đơn đăng ký</h3>
+
+            <p>Điền thông tin cá nhân và điều kiện chăm sóc thú cưng.</p>
+          </div>
+
+          <!-- STEP -->
+
+          <div class="card step-card">
+            <div class="step-number">03</div>
+
+            <h3>Đón bé về nhà</h3>
+
+            <p>Hoàn tất thủ tục và chào đón thành viên mới.</p>
+          </div>
+        </div>
       </div>
+    </section>
 
-    </div>
+    <!-- NEW PETS -->
 
-  </section>
+    <section class="section">
+      <div class="container">
+        <!-- HEADER -->
 
-  <!-- NEW PETS -->
+        <div class="section-heading">
+          <div>
+            <span class="badge"> 🐾 Thú cưng mới </span>
 
-  <section class="section">
+            <h2 class="section-title">Những bé đang chờ mái ấm</h2>
+          </div>
 
-    <div class="container">
-
-      <!-- HEADER -->
-
-      <div class="section-heading">
-
-        <div>
-
-          <span class="badge">
-
-            🐾 Thú cưng mới
-
-          </span>
-
-          <h2 class="section-title">
-
-            Những bé đang chờ mái ấm
-
-          </h2>
-
+          <a href="pets.html" class="btn btn-outline"> Xem tất cả </a>
         </div>
 
-        <a
-          href="pets.html"
-          class="btn btn-outline">
+        <!-- PETS GRID -->
 
-          Xem tất cả
-
-        </a>
-
+        <div class="pets-grid" id="homePets">
+          <!-- API RENDER -->
+        </div>
       </div>
+    </section>
 
-      <!-- PETS GRID -->
+    <!-- TESTIMONIAL -->
 
-      <div
-        class="pets-grid"
-        id="homePets">
+    <section class="section">
+      <div class="container">
+        <!-- TITLE -->
 
-        <!-- API RENDER -->
+        <div class="section-heading">
+          <div>
+            <span class="badge"> 💬 Đánh giá </span>
 
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- TESTIMONIAL -->
-
-  <section class="section">
-
-    <div class="container">
-
-      <!-- TITLE -->
-
-      <div class="section-heading">
-
-        <div>
-
-          <span class="badge">
-
-            💬 Đánh giá
-
-          </span>
-
-          <h2 class="section-title">
-
-            Những người đã nhận nuôi nói gì?
-
-          </h2>
-
+            <h2 class="section-title">Những người đã nhận nuôi nói gì?</h2>
+          </div>
         </div>
 
-      </div>
+        <!-- GRID -->
 
-      <!-- GRID -->
+        <div class="testimonial-grid">
+          <!-- CARD -->
 
-      <div class="testimonial-grid">
+          <div class="card testimonial-card">
+            <div class="testimonial-user">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" />
 
-        <!-- CARD -->
+              <div>
+                <h4>Ngọc Anh</h4>
 
-        <div class="card testimonial-card">
-
-          <div class="testimonial-user">
-
-            <img
-              src="https://randomuser.me/api/portraits/women/44.jpg">
-
-            <div>
-
-              <h4>
-                Ngọc Anh
-              </h4>
-
-              <span>
-                Hà Nội
-              </span>
-
+                <span> Hà Nội </span>
+              </div>
             </div>
 
+            <p>
+              “Nhờ PetAdopt mà mình đã tìm được một người bạn cực kỳ đáng yêu.”
+            </p>
           </div>
 
-          <p>
+          <!-- CARD -->
 
-            “Nhờ PetAdopt mà mình đã tìm được
-            một người bạn cực kỳ đáng yêu.”
+          <div class="card testimonial-card">
+            <div class="testimonial-user">
+              <img src="https://randomuser.me/api/portraits/men/31.jpg" />
 
-          </p>
+              <div>
+                <h4>Minh Hoàng</h4>
 
-        </div>
-
-        <!-- CARD -->
-
-        <div class="card testimonial-card">
-
-          <div class="testimonial-user">
-
-            <img
-              src="https://randomuser.me/api/portraits/men/31.jpg">
-
-            <div>
-
-              <h4>
-                Minh Hoàng
-              </h4>
-
-              <span>
-                TP.HCM
-              </span>
-
+                <span> TP.HCM </span>
+              </div>
             </div>
 
+            <p>
+              “Giao diện rất chuyên nghiệp, quy trình nhận nuôi cực kỳ dễ dàng.”
+            </p>
           </div>
 
-          <p>
+          <!-- CARD -->
 
-            “Giao diện rất chuyên nghiệp,
-            quy trình nhận nuôi cực kỳ dễ dàng.”
+          <div class="card testimonial-card">
+            <div class="testimonial-user">
+              <img src="https://randomuser.me/api/portraits/women/68.jpg" />
 
-          </p>
+              <div>
+                <h4>Thu Trang</h4>
 
-        </div>
-
-        <!-- CARD -->
-
-        <div class="card testimonial-card">
-
-          <div class="testimonial-user">
-
-            <img
-              src="https://randomuser.me/api/portraits/women/68.jpg">
-
-            <div>
-
-              <h4>
-                Thu Trang
-              </h4>
-
-              <span>
-                Đà Nẵng
-              </span>
-
+                <span> Đà Nẵng </span>
+              </div>
             </div>
 
+            <p>“Mình đã nhận nuôi thành công một bé mèo rất ngoan.”</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+
+    <section class="cta-section">
+      <div class="container cta-wrapper">
+        <h2>Hãy cho các bé một mái ấm</h2>
+
+        <p>Một hành động nhỏ có thể thay đổi cả cuộc đời của một thú cưng.</p>
+
+        <a href="pets.html" class="btn btn-primary"> Khám phá thú cưng </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+      <div class="container footer-grid">
+        <!-- ABOUT -->
+
+        <div>
+          <h2>PetAdopt</h2>
+
+          <p>Nền tảng kết nối nhận nuôi thú cưng chuyên nghiệp.</p>
+        </div>
+
+        <!-- LINKS -->
+
+        <div>
+          <h3>Khám phá</h3>
+
+          <a href="pets.html"> Thú cưng </a>
+
+          <a href="blog.html"> Tin tức </a>
+
+          <a href="profile.html"> Hồ sơ </a>
+        </div>
+
+        <!-- CONTACT -->
+
+        <div>
+          <h3>Liên hệ</h3>
+
+          <p>support@petadopt.com</p>
+
+          <p>0123 456 789</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- TOAST -->
+
+    <div class="toast"></div>
+
+    <!-- ADMIN MODAL -->
+
+    <div class="modal" id="adminModal">
+      <div class="modal-overlay"></div>
+
+      <div class="modal-content small-modal">
+        <!-- CLOSE -->
+
+        <button class="modal-close">✕</button>
+
+        <h2>Đăng nhập quản trị</h2>
+
+        <p class="admin-note-text">
+          Tài khoản:
+          <b>admin</b>
+
+          <br />
+
+          Mật khẩu: nhập bất kỳ
+        </p>
+
+        <!-- FORM -->
+
+        <form id="adminLoginForm">
+          <div class="input-group">
+            <label> Tài khoản </label>
+
+            <input
+              type="text"
+              id="adminUsername"
+              placeholder="Nhập tài khoản"
+            />
           </div>
 
-          <p>
+          <div class="input-group">
+            <label> Mật khẩu </label>
 
-            “Mình đã nhận nuôi thành công
-            một bé mèo rất ngoan.”
+            <input
+              type="password"
+              id="adminPassword"
+              placeholder="Nhập mật khẩu"
+            />
+          </div>
 
-          </p>
-
-        </div>
-
+          <button type="submit" class="btn btn-primary">Đăng nhập Admin</button>
+        </form>
       </div>
-
     </div>
 
-  </section>
+    <!-- JS -->
 
-  <!-- CTA -->
-
-  <section class="cta-section">
-
-    <div class="container cta-wrapper">
-
-      <h2>
-
-        Hãy cho các bé một mái ấm
-
-      </h2>
-
-      <p>
-
-        Một hành động nhỏ có thể thay đổi
-        cả cuộc đời của một thú cưng.
-
-      </p>
-
-      <a
-        href="pets.html"
-        class="btn btn-primary">
-
-        Khám phá thú cưng
-
-      </a>
-
-    </div>
-
-  </section>
-
-  <!-- FOOTER -->
-
-  <footer class="footer">
-
-    <div class="container footer-grid">
-
-      <!-- ABOUT -->
-
-      <div>
-
-        <h2>
-          PetAdopt
-        </h2>
-
-        <p>
-
-          Nền tảng kết nối nhận nuôi
-          thú cưng chuyên nghiệp.
-
-        </p>
-
-      </div>
-
-      <!-- LINKS -->
-
-      <div>
-
-        <h3>
-          Khám phá
-        </h3>
-
-        <a href="pets.html">
-          Thú cưng
-        </a>
-
-        <a href="blog.html">
-          Tin tức
-        </a>
-
-        <a href="profile.html">
-          Hồ sơ
-        </a>
-
-      </div>
-
-      <!-- CONTACT -->
-
-      <div>
-
-        <h3>
-          Liên hệ
-        </h3>
-
-        <p>
-          support@petadopt.com
-        </p>
-
-        <p>
-          0123 456 789
-        </p>
-
-      </div>
-
-    </div>
-
-  </footer>
-
-  <!-- TOAST -->
-
-  <div class="toast"></div>
-
-  <!-- ADMIN MODAL -->
-
-  <div
-    class="modal"
-    id="adminModal">
-
-    <div class="modal-overlay"></div>
-
-    <div class="modal-content small-modal">
-
-      <!-- CLOSE -->
-
-      <button class="modal-close">
-
-        ✕
-
-      </button>
-
-      <h2>
-
-        Đăng nhập quản trị
-
-      </h2>
-
-      <p class="admin-note-text">
-
-        Tài khoản:
-        <b>admin</b>
-
-        <br>
-
-        Mật khẩu:
-        nhập bất kỳ
-
-      </p>
-
-      <!-- FORM -->
-
-      <form id="adminLoginForm">
-
-        <div class="input-group">
-
-          <label>
-
-            Tài khoản
-
-          </label>
-
-          <input
-            type="text"
-            id="adminUsername"
-            placeholder="Nhập tài khoản">
-
-        </div>
-
-        <div class="input-group">
-
-          <label>
-
-            Mật khẩu
-
-          </label>
-
-          <input
-            type="password"
-            id="adminPassword"
-            placeholder="Nhập mật khẩu">
-
-        </div>
-
-        <button
-          type="submit"
-          class="btn btn-primary">
-
-          Đăng nhập Admin
-
-        </button>
-
-      </form>
-
-    </div>
-
-  </div>
-
-  <!-- JS -->
-
-  <script src="js/app.js"></script>
-
-</body>
-
+    <script src="js/app.js"></script>
+  </body>
 </html>

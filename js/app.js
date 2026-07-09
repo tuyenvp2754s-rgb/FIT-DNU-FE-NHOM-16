@@ -11,11 +11,14 @@ const API_URL = 'https://6a0d322e769682b8ee75c462.mockapi.io/api/v1/pets';
 const ADOPTION_FORM_KEY = 'adoptionFormData';
 const FAVORITES_KEY = 'petFavorites';
 const SELECTED_PET_KEY = 'selectedPet';
+const AUTH_USERS_KEY = 'petadoptUsers';
+const AUTH_SESSION_KEY = 'petadoptSession';
 
 let allPets = [];
 let filteredPets = [];
 let currentPage = 1;
 const petsPerPage = 12;
+let pendingAuthAction = null;
 
 // ============================================
 // 2. UTILITY FUNCTIONS
@@ -25,18 +28,16 @@ const petsPerPage = 12;
  * Hiển thị thông báo Toast
  */
 function showToast(message, type = 'success') {
-  const toast = document.querySelector('.toast');
+  let toast = document.querySelector('.toast');
   if (!toast) {
-    // Nếu trang chưa có sẵn thẻ toast, tự động tạo để tránh lỗi code
-    const newToast = document.createElement('div');
-    newToast.className = 'toast';
-    document.body.appendChild(newToast);
-    return;
+    toast = document.createElement('div');
+    toast.className = 'toast';
+    document.body.appendChild(toast);
   }
 
   toast.textContent = message;
-  toast.className = `toast show`;
-  
+  toast.className = 'toast show';
+
   if (type === 'error') {
     toast.style.background = '#ef4444';
   } else if (type === 'warning') {
@@ -153,12 +154,27 @@ async function fetchPets() {
 // ============================================
 
 /**
+ * Kiểm tra pet có đơn nhận nuôi đã được duyệt hay không
+ * @param {number|string} petId - ID của thú cưng
+ * @returns {boolean} true nếu pet đã được duyệt
+ */
+function isPetApproved(petId) {
+  const applications = storage.get(ADOPTION_FORM_KEY) || [];
+  return applications.some(app => {
+    const appPetId = app.petId || (app.pet && String(app.pet.id));
+    return String(appPetId) === String(petId) && 
+           (app.status === 'Đã duyệt' || app.status === 'approved' || app.status === 'APPROVED');
+  });
+}
+
+/**
  * Tạo cấu trúc HTML cho từng thẻ thú cưng (Sửa lỗi hiển thị text undefined)
  */
 function createPetCard(pet) {
   const isFavorite = isFavoritePet(pet.id);
   const emoji = getPetEmoji(pet.type);
   const genderEmoji = getGenderEmoji(pet.gender);
+  const isApproved = isPetApproved(pet.id);
   
   // Chuẩn hóa văn bản hiển thị loài vật, tránh hiển thị chữ gốc tiếng Anh hoặc bị undefined
   let typeText = 'Thú cưng';
@@ -187,10 +203,12 @@ function createPetCard(pet) {
           ${pet.description || 'Bé rất thân thiện và dễ chăm sóc'}
         </p>
         <div style="display: flex; gap: var(--spacing-md); margin-top: auto;">
-          <button class="btn btn-primary" onclick="goToAdoptionForm('${pet.id}')">
-            Nhận nuôi
+          <button class="btn btn-primary adoption-btn" data-pet-id="${pet.id}" 
+            ${isApproved ? 'disabled' : ''} onclick="handleAdoptionAction('${pet.id}')">
+            ${isApproved ? '✅ Đã có chủ' : '🏠 Nhận nuôi'}
           </button>
-          <button class="btn btn-outline favorite-btn" data-pet-id="${pet.id}" onclick="toggleFavorite('${pet.id}')">
+          <button class="btn btn-outline favorite-btn" data-pet-id="${pet.id}" 
+            ${isApproved ? 'disabled' : ''} onclick="handleFavoriteAction('${pet.id}')">
             ${isFavorite ? '❤️ Đã lưu' : '🤍 Lưu'}
           </button>
         </div>
@@ -227,15 +245,8 @@ function renderPetsGrid(pets, containerId = 'petsContainer') {
 
   container.innerHTML = availablePets.map(pet => createPetCard(pet)).join('');
   
-  // Gán sự kiện click mở Modal chi tiết
-  document.querySelectorAll('.pet-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-      if (!e.target.closest('button')) {
-        const petId = card.dataset.petId;
-        openPetModal(petId);
-      }
-    });
-  });
+  // QUAN TRỌNG: Không gán event listener trực tiếp ở đây!
+  // Event Delegation sẽ được xử lý ở hàm setupPetsGridEventDelegation()
 }
 
 /**
@@ -261,14 +272,8 @@ function renderHomePets() {
 
   container.innerHTML = homePets.map(pet => createPetCard(pet)).join('');
   
-  document.querySelectorAll('#homePets .pet-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-      if (!e.target.closest('button')) {
-        const petId = card.dataset.petId;
-        openPetModal(petId);
-      }
-    });
-  });
+  // QUAN TRỌNG: Không gán event listener ở đây!
+  // Event Delegation sẽ được setup riêng cho homePets container
 }
 
 // ============================================
@@ -315,6 +320,7 @@ function filterPets() {
 
   currentPage = 1;
   renderPaginatedPets();
+  setupPetsGridEventDelegation();  // ✅ Re-setup event delegation khi filter thay đổi
 }
 
 /**
@@ -357,14 +363,8 @@ function loadMorePets() {
     const newCards = availablePaginated.map(pet => createPetCard(pet)).join('');
     container.innerHTML += newCards;
 
-    document.querySelectorAll('.pet-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        if (!e.target.closest('button')) {
-          const petId = card.dataset.petId;
-          openPetModal(petId);
-        }
-      });
-    });
+    // ✅ Re-setup event delegation vì có pet card mới được thêm vào
+    setupPetsGridEventDelegation();
 
     const finalAvailableCount = filteredPets.filter(pet => !adoptedPetIds.includes(String(pet.id))).length;
     const loadMoreBtn = document.getElementById('loadMoreBtn');
@@ -379,7 +379,74 @@ function loadMorePets() {
 // ============================================
 
 /**
+ * ============================================================
+ * SETUP EVENT DELEGATION CHO PET CARDS
+ * ============================================================
+ * 
+ * GIẢI THÍCH LỖI CŨ:
+ * Trước đây, code gán event listener trực tiếp cho từng card
+ * bằng document.querySelectorAll('.pet-card').forEach(...)
+ * 
+ * Vấn đề:
+ * - Mỗi lần render lại danh sách (filter, load more), event listener lại được gán thêm
+ * - Event listener cũ vẫn tồn tại → modal bị "kẹt" hoặc không hoạt động
+ * - Gây lỗi: Click lần 2 trở đi, modal không hiển thị
+ * 
+ * GIẢI PHÁP - EVENT DELEGATION:
+ * - Gán listener MỘT LẦN DUY NHẤT trên container cha (petsContainer)
+ * - Khi click bất cứ đâu, kiểm tra xem click vào card nào
+ * - Không cần gán listener mỗi lần render
+ * 
+ * ============================================================
+ */
+function setupPetsGridEventDelegation() {
+  const petsContainer = document.getElementById('petsContainer');
+  if (!petsContainer) return;
+
+  // Xóa listener cũ (nếu có) để tránh lặp lại
+  petsContainer.removeEventListener('click', handlePetCardClick);
+  
+  // Gán MỘT listener cho toàn bộ container
+  petsContainer.addEventListener('click', handlePetCardClick);
+}
+
+/**
+ * Hàm xử lý click event (dùng cho Event Delegation)
+ */
+function handlePetCardClick(event) {
+  // Nếu click vào button, bỏ qua (để button onclick xử lý)
+  if (event.target.closest('button')) {
+    return;
+  }
+
+  // Tìm card cha của element được click
+  const card = event.target.closest('.pet-card');
+  if (!card) return;
+
+  // Lấy ID từ data attribute
+  const petId = card.dataset.petId;
+  if (petId) {
+    openPetModal(petId);
+  }
+}
+
+/**
+ * Setup Event Delegation cho home pets container
+ */
+function setupHomeEventDelegation() {
+  const homePetsContainer = document.getElementById('homePets');
+  if (!homePetsContainer) return;
+
+  // Xóa listener cũ (nếu có)
+  homePetsContainer.removeEventListener('click', handlePetCardClick);
+  
+  // Gán listener cho home pets container
+  homePetsContainer.addEventListener('click', handlePetCardClick);
+}
+
+/**
  * Mở hộp thoại Modal chi tiết thú cưng
+ * CẢI TIẾN: Clear modal content trước khi populate
  */
 function openPetModal(petId) {
   const pet = allPets.find(p => p.id === petId);
@@ -387,6 +454,13 @@ function openPetModal(petId) {
 
   const modal = document.getElementById('petModal');
   if (!modal) return;
+
+  // ✅ QUAN TRỌNG: Clear modal content cũ trước khi thêm dữ liệu mới
+  // Tránh dữ liệu cũ bị lẫn vào
+  modal.querySelectorAll('[id^="modalPet"]').forEach(el => {
+    el.textContent = '';
+    el.src = '';
+  });
 
   const emoji = getPetEmoji(pet.type);
   const genderEmoji = getGenderEmoji(pet.gender);
@@ -398,6 +472,7 @@ function openPetModal(petId) {
 
   const genderLabel = (pet.gender === 'male' || pet.gender === 'đực') ? 'Đực' : 'Cái';
 
+  // Populate modal với dữ liệu pet mới
   document.getElementById('modalPetImage').src = pet.image;
   document.getElementById('modalPetImage').onerror = function() {
     this.src = 'https://via.placeholder.com/300?text=' + pet.name;
@@ -413,29 +488,41 @@ function openPetModal(petId) {
   const favBtn = document.getElementById('saveFavoriteBtn');
   if (favBtn) {
     favBtn.textContent = isFavorite ? '❤️ Đã lưu' : '🤍 Lưu yêu thích';
-    favBtn.onclick = () => toggleFavorite(petId);
+    favBtn.onclick = () => handleFavoriteAction(petId);
   }
 
   modal.classList.add('active');
 
+  // Setup close button (gán một lần, không gán lại nhiều lần)
   const closeBtn = modal.querySelector('.modal-close');
-  if (closeBtn) {
+  if (closeBtn && !closeBtn.hasAttribute('data-listener-attached')) {
     closeBtn.onclick = () => closePetModal();
+    closeBtn.setAttribute('data-listener-attached', 'true');
   }
 
+  // Setup overlay click (gán một lần, không gán lại nhiều lần)
   const overlay = modal.querySelector('.modal-overlay');
-  if (overlay) {
+  if (overlay && !overlay.hasAttribute('data-listener-attached')) {
     overlay.onclick = () => closePetModal();
+    overlay.setAttribute('data-listener-attached', 'true');
   }
 }
 
 /**
  * Đóng hộp thoại Modal chi tiết thú cưng
+ * CẢI TIẾN: Clear modal content khi đóng
  */
 function closePetModal() {
   const modal = document.getElementById('petModal');
   if (modal) {
     modal.classList.remove('active');
+    
+    // ✅ Clear modal content để tránh lẫn dữ liệu
+    modal.querySelectorAll('[id^="modalPet"]').forEach(el => {
+      el.textContent = '';
+      el.src = '';
+      el.onclick = null; // Clear onClick handlers
+    });
   }
 }
 
@@ -468,11 +555,20 @@ async function renderAdoptionHistory() {
 // Gọi hàm này khi trang tải xong
 window.onload = renderAdoptionHistory;
 function goToAdoptionForm(petId) {
+  if (!getCurrentUser()) {
+    showAuthRequired('adoption', petId);
+    return;
+  }
+
   const pet = allPets.find(p => p.id === petId);
   if (pet) {
     storage.set(SELECTED_PET_KEY, pet);
     window.location.href = 'adoption.html';
   }
+}
+
+function handleAdoptionAction(petId) {
+  goToAdoptionForm(petId);
 }
 
 /**
@@ -588,10 +684,16 @@ function initFormSteps() {
  * Xử lý thu thập thông tin và đóng gói đơn nhận nuôi lưu vào Lịch sử
  */
 function submitAdoptionForm() {
-  const fullName = document.querySelector('input[placeholder*="Họ tên"]')?.value || document.querySelector('input[placeholder*="họ tên"]')?.value || "Người dùng ẩn danh";
-  const email = document.querySelector('input[type="email"]')?.value || "Chưa cung cấp Email";
-  const phone = document.querySelector('input[type="tel"]')?.value || document.querySelector('input[placeholder*="điện thoại"]')?.value || "Chưa nhập số điện thoại";
-  const address = document.querySelector('textarea[placeholder*="địa chỉ"]')?.value || document.querySelector('input[placeholder*="địa chỉ"]')?.value || "Chưa nhập địa chỉ";
+  if (!getCurrentUser()) {
+    showToast('Bạn cần đăng nhập để gửi hồ sơ nhận nuôi.', 'error');
+    showAuthRequired('adoption', getSelectedPet()?.id);
+    return;
+  }
+
+  const fullName = document.getElementById('adoptionFullName')?.value?.trim() || "Người dùng ẩn danh";
+  const email = document.getElementById('adoptionEmail')?.value?.trim() || "Chưa cung cấp Email";
+  const phone = document.getElementById('adoptionPhone')?.value?.trim() || "Chưa nhập số điện thoại";
+  const address = document.getElementById('adoptionAddress')?.value?.trim() || "Chưa nhập địa chỉ";
 
   const selectedPet = getSelectedPet();
   if (!selectedPet) {
@@ -599,31 +701,62 @@ function submitAdoptionForm() {
     return;
   }
 
+  const currentUser = getCurrentUser();
   const newApplication = {
-    id: 'HS-' + Date.now(),
-    fullName,
-    email,
-    phone,
-    address,
-    pet: selectedPet, 
-    submittedAt: new Date().toISOString(),
-    status: 'pending' 
+    userName: fullName,
+    email: email,
+    phone: phone,
+    address: address,
+    petName: selectedPet.name,
+    petId: selectedPet.id,
+    userId: currentUser.id,
+    username: currentUser.username,
+    status: "Chờ duyệt",
+    submittedAt: new Date().toISOString()
   };
 
-  let currentApplications = storage.get(ADOPTION_FORM_KEY);
-  if (!Array.isArray(currentApplications)) {
-    currentApplications = currentApplications ? [currentApplications] : [];
-  }
+  // POST lên MockAPI
+  fetch('https://6a0d322e769682b8ee75c462.mockapi.io/api/v1/adoptions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newApplication)
+  })
+  .then(res => res.json())
+  .then(data => {
+    // Cũng lưu ở localStorage để hiển thị local
+    let currentApplications = getUserApplications();
+    if (!Array.isArray(currentApplications)) {
+      currentApplications = currentApplications ? [currentApplications] : [];
+    }
+    currentApplications.unshift(newApplication);
+    setUserApplications(currentApplications);
 
-  currentApplications.unshift(newApplication); 
-  storage.set(ADOPTION_FORM_KEY, currentApplications);
+    showToast('Gửi hồ sơ thành công! Đang chuyển hướng...', 'success');
+    storage.remove(SELECTED_PET_KEY);
 
-  showToast('Gửi hồ sơ thành công! Đang chuyển hướng...', 'success');
-  storage.remove(SELECTED_PET_KEY);
+    setTimeout(() => {
+      window.location.href = 'history.html';
+    }, 1500);
+  })
+  .catch(err => {
+    console.error('Lỗi khi gửi hồ sơ:', err);
+    // Fallback: lưu ở localStorage nếu API lỗi
+    let currentApplications = getUserApplications();
+    if (!Array.isArray(currentApplications)) {
+      currentApplications = currentApplications ? [currentApplications] : [];
+    }
+    currentApplications.unshift(newApplication);
+    setUserApplications(currentApplications);
 
-  setTimeout(() => {
-    window.location.href = 'history.html';
-  }, 1500);
+    showToast('Hồ sơ được lưu (offline mode). Đang chuyển hướng...', 'success');
+    storage.remove(SELECTED_PET_KEY);
+
+    setTimeout(() => {
+      window.location.href = 'history.html';
+    }, 1500);
+  });
 }
 
 /**
@@ -634,7 +767,7 @@ function renderAdoptionHistory() {
   const emptyState = document.querySelector('.empty-state');
   if (!gridContainer) return;
 
-  let applications = storage.get(ADOPTION_FORM_KEY) || [];
+  let applications = getUserApplications();
   if (!Array.isArray(applications)) {
     applications = [applications];
   }
@@ -713,13 +846,68 @@ function renderAdoptionHistory() {
 // 8. FAVORITES & PROFILE SYNCHRONIZATION
 // ============================================
 
+function getCurrentUser() {
+  try {
+    const savedUser = sessionStorage.getItem(AUTH_SESSION_KEY);
+    return savedUser ? JSON.parse(savedUser) : null;
+  } catch (error) {
+    console.error('Auth session error:', error);
+    return null;
+  }
+}
+
+function getUserStorageKey(baseKey) {
+  const user = getCurrentUser();
+  return user ? `${baseKey}_${user.id}` : baseKey;
+}
+
+function getUserData(baseKey, fallback = []) {
+  const key = getUserStorageKey(baseKey);
+  return storage.get(key) ?? fallback;
+}
+
+function setUserData(baseKey, value) {
+  const key = getUserStorageKey(baseKey);
+  storage.set(key, value);
+}
+
+function getUserFavorites() {
+  return getUserData(FAVORITES_KEY, []);
+}
+
+function setUserFavorites(favorites) {
+  setUserData(FAVORITES_KEY, favorites);
+}
+
+function getUserApplications() {
+  return getUserData(ADOPTION_FORM_KEY, []);
+}
+
+function setUserApplications(applications) {
+  setUserData(ADOPTION_FORM_KEY, applications);
+}
+
 function isFavoritePet(petId) {
-  const favorites = storage.get(FAVORITES_KEY) || [];
+  const favorites = getUserFavorites();
   return favorites.includes(String(petId));
 }
 
+function handleFavoriteAction(petId) {
+  if (!getCurrentUser()) {
+    showAuthRequired('favorite', petId);
+    return;
+  }
+
+  toggleFavorite(petId);
+}
+
 function toggleFavorite(petId) {
-  let favorites = storage.get(FAVORITES_KEY) || [];
+  if (!getCurrentUser()) {
+    showAuthRequired('favorite', petId);
+    return;
+  }
+
+  let favorites = getUserFavorites();
   petId = String(petId);
 
   if (favorites.includes(petId)) {
@@ -730,7 +918,7 @@ function toggleFavorite(petId) {
     showToast('Đã thêm vào danh sách yêu thích');
   }
 
-  storage.set(FAVORITES_KEY, favorites);
+  setUserFavorites(favorites);
 
   const btns = document.querySelectorAll(`[data-pet-id="${petId}"]`);
   btns.forEach(btn => {
@@ -740,14 +928,46 @@ function toggleFavorite(petId) {
 }
 
 /**
+ * REFRESH DỮ LIỆU ADOPTION TỪ MockAPI - ĐẢM BẢO LUÔN HIỂN THỊ DỮ LIỆU MỚI NHẤT
+ * Hàm này fetch từ MockAPI và cập nhật localStorage với dữ liệu mới
+ */
+async function refreshUserAdoptionsFromAPI() {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return; // Không fetch nếu user chưa đăng nhập
+
+  try {
+    const response = await fetch('https://6a0d322e769682b8ee75c462.mockapi.io/api/v1/adoptions');
+    if (!response.ok) throw new Error('Không thể tải dữ liệu từ API');
+
+    const allAdoptions = await response.json();
+    
+    // Filter chỉ lấy các hồ sơ của user hiện tại
+    const userAdoptions = Array.isArray(allAdoptions) 
+      ? allAdoptions.filter(adoption => 
+          adoption.userId === currentUser.id || 
+          adoption.username === currentUser.username
+        )
+      : [];
+
+    // Cập nhật localStorage với dữ liệu mới từ API
+    if (userAdoptions.length > 0) {
+      setUserApplications(userAdoptions);
+    }
+  } catch (error) {
+    console.warn('Không thể refresh adoption data từ API:', error);
+    // Fallback sử dụng dữ liệu cũ từ localStorage
+  }
+}
+
+/**
  * ĐỒNG BỘ HIỂN THỊ TRANG CÁ NHÂN (PROFILE.HTML) - FIX LỖI KHÔNG XOÁ ĐƯỢC CON VẬT
  */
 function renderProfilePage() {
   const favContainer = document.getElementById("profileFavoritesList");
   const historyContainer = document.getElementById("profileHistoryList");
 
-  const favorites = storage.get(FAVORITES_KEY) || [];
-  const applications = storage.get(ADOPTION_FORM_KEY) || [];
+  const favorites = getUserFavorites();
+  const applications = getUserApplications();
 
   // --- RENDERING THÚ CƯNG YÊU THÍCH ---
   if (favContainer) {
@@ -787,15 +1007,17 @@ function renderProfilePage() {
       historyContainer.innerHTML = `<p style="color: #6b7280; font-style: italic; padding: 12px 0;">Bạn chưa gửi đơn đăng ký nhận nuôi bé nào.</p>`;
     } else {
       historyContainer.innerHTML = applications.map(form => {
-        const petName = form.pet ? form.pet.name : 'Thú cưng';
+        // Hỗ trợ cả format cũ (form.pet.name) và format mới (form.petName)
+        const petName = form.petName || (form.pet ? form.pet.name : 'Thú cưng');
         const formattedDate = formatDate(form.submittedAt);
         let statusText = 'Đang chờ';
         let badgeStyle = 'background: #fef3c7; color: #d97706;';
 
-        if (form.status === 'approved' || form.status === 'APPROVED') {
+        // Kiểm tra status - hỗ trợ cả tiếng Anh và tiếng Việt
+        if (form.status === 'approved' || form.status === 'APPROVED' || form.status === 'Đã duyệt') {
           statusText = 'Đã duyệt';
           badgeStyle = 'background: #d1fae5; color: #059669;';
-        } else if (form.status === 'rejected' || form.status === 'REJECTED') {
+        } else if (form.status === 'rejected' || form.status === 'REJECTED' || form.status === 'Từ chối') {
           statusText = 'Từ chối';
           badgeStyle = 'background: #fee2e2; color: #ef4444;';
         }
@@ -817,7 +1039,9 @@ function renderProfilePage() {
   if (document.getElementById("statFavorites")) document.getElementById("statFavorites").textContent = favorites.length;
   if (document.getElementById("statApplications")) document.getElementById("statApplications").textContent = applications.length;
   if (document.getElementById("statApproved")) {
-    const approvedCount = applications.filter(a => a.status === 'approved' || a.status === 'APPROVED').length;
+    const approvedCount = applications.filter(a => 
+      a.status === 'approved' || a.status === 'APPROVED' || a.status === 'Đã duyệt'
+    ).length;
     document.getElementById("statApproved").textContent = approvedCount;
   }
 }
@@ -826,12 +1050,12 @@ function renderProfilePage() {
  * HÀM XỬ LÝ CLICK BỎ LƯU - XOÁ TRỰC TIẾP KHÔNG CẦN F5 TRANG
  */
 function profileRemoveFavorite(petId) {
-  let favorites = storage.get(FAVORITES_KEY) || [];
+  let favorites = getUserFavorites();
   petId = String(petId);
 
   // Xóa ID thú cưng khỏi danh sách mảng dữ liệu
   favorites = favorites.filter(id => id !== petId);
-  storage.set(FAVORITES_KEY, favorites);
+  setUserFavorites(favorites);
 
   showToast("Đã xóa khỏi danh sách yêu thích!");
 
@@ -867,8 +1091,242 @@ function localUnfavorite(petId) {
 }
 
 // ============================================
-// 9. ADMIN LOGIN
+// 9. AUTHENTICATION (ĐĂNG NHẬP / ĐĂNG KÝ)
 // ============================================
+
+function buildAuthMarkup() {
+  return `
+    <div id="authModal" class="auth-modal" aria-hidden="true">
+      <div class="auth-modal__overlay"></div>
+      <div class="auth-modal__dialog">
+        <button id="authModalClose" class="auth-modal__close" type="button">×</button>
+        <div class="auth-modal__header">
+          <h3 id="authModalTitle">Đăng nhập</h3>
+          <p id="authModalSubtitle">Đăng nhập để lưu thú cưng và gửi hồ sơ nhận nuôi.</p>
+        </div>
+
+        <div class="auth-modal__tabs">
+          <button class="auth-tab active" data-mode="login" type="button">Đăng nhập</button>
+          <button class="auth-tab" data-mode="register" type="button">Đăng ký</button>
+        </div>
+
+        <form id="authForm" class="auth-form">
+          <input id="authUsername" name="username" type="text" placeholder="Tên đăng nhập" required>
+          <input id="authEmail" name="email" type="email" placeholder="Email" class="auth-field--register" style="display: none;">
+          <input id="authPassword" name="password" type="password" placeholder="Mật khẩu" required>
+          <input id="authConfirmPassword" name="confirmPassword" type="password" placeholder="Xác nhận mật khẩu" class="auth-field--register" style="display: none;">
+          <button class="btn btn-primary auth-submit-btn" type="submit">Đăng nhập</button>
+        </form>
+
+        <p id="authMessage" class="auth-message"></p>
+      </div>
+    </div>
+  `;
+}
+
+function initAuthSystem() {
+  if (document.getElementById('authModal')) {
+    return;
+  }
+
+  document.body.insertAdjacentHTML('beforeend', buildAuthMarkup());
+
+  let authButton = document.getElementById('authNavbarBtn');
+  if (!authButton) {
+    const navWrapper = document.querySelector('.nav-wrapper');
+    authButton = document.createElement('button');
+    authButton.id = 'authNavbarBtn';
+    authButton.type = 'button';
+    authButton.className = 'btn btn-primary auth-navbar-btn';
+    authButton.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Đăng nhập';
+
+    if (navWrapper) {
+      navWrapper.appendChild(authButton);
+    } else {
+      document.body.appendChild(authButton);
+    }
+  }
+
+  const authModal = document.getElementById('authModal');
+  const authClose = document.getElementById('authModalClose');
+  const authOverlay = authModal?.querySelector('.auth-modal__overlay');
+  const authTabs = document.querySelectorAll('.auth-tab');
+  const authForm = document.getElementById('authForm');
+  const authMessage = document.getElementById('authMessage');
+  const title = document.getElementById('authModalTitle');
+  const subtitle = document.getElementById('authModalSubtitle');
+  const submitButton = authForm?.querySelector('.auth-submit-btn');
+  const usernameInput = document.getElementById('authUsername');
+  const emailInput = document.getElementById('authEmail');
+  const passwordInput = document.getElementById('authPassword');
+  const confirmInput = document.getElementById('authConfirmPassword');
+
+  authButton?.addEventListener('click', () => {
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+      handleLogout();
+    } else {
+      openAuthModal();
+    }
+  });
+
+  authClose?.addEventListener('click', closeAuthModal);
+  authOverlay?.addEventListener('click', closeAuthModal);
+
+  authTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const mode = tab.dataset.mode;
+      authTabs.forEach(item => item.classList.toggle('active', item === tab));
+      const isRegister = mode === 'register';
+      document.querySelectorAll('.auth-field--register').forEach(field => {
+        field.style.display = isRegister ? 'block' : 'none';
+      });
+      title.textContent = isRegister ? 'Đăng ký' : 'Đăng nhập';
+      subtitle.textContent = isRegister
+        ? 'Tạo tài khoản để lưu thú cưng riêng cho bạn.'
+        : 'Đăng nhập để lưu thú cưng và gửi hồ sơ nhận nuôi.';
+      submitButton.textContent = isRegister ? 'Đăng ký' : 'Đăng nhập';
+      authMessage.textContent = '';
+      usernameInput.value = '';
+      emailInput.value = '';
+      passwordInput.value = '';
+      confirmInput.value = '';
+    });
+  });
+
+  authForm?.addEventListener('submit', handleAuthSubmit);
+  updateAuthButton();
+}
+
+function openAuthModal(message = '') {
+  const modal = document.getElementById('authModal');
+  const authMessage = document.getElementById('authMessage');
+  if (modal) {
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+  if (authMessage) {
+    authMessage.textContent = message;
+  }
+}
+
+function closeAuthModal() {
+  const modal = document.getElementById('authModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+}
+
+function showAuthRequired(actionType = 'general', petId = null) {
+  pendingAuthAction = { type: actionType, petId: petId ? String(petId) : null };
+  openAuthModal('Bạn cần đăng nhập để thực hiện chức năng này. Nếu chưa có tài khoản, hãy chọn Đăng ký.');
+}
+
+function handleAuthSubmit(event) {
+  event.preventDefault();
+
+  const currentMode = document.querySelector('.auth-tab.active')?.dataset.mode || 'login';
+  const username = document.getElementById('authUsername')?.value.trim();
+  const email = document.getElementById('authEmail')?.value.trim();
+  const password = document.getElementById('authPassword')?.value;
+  const confirmPassword = document.getElementById('authConfirmPassword')?.value;
+  const authMessage = document.getElementById('authMessage');
+
+  if (!username || !password) {
+    if (authMessage) authMessage.textContent = 'Vui lòng nhập tên đăng nhập và mật khẩu.';
+    return;
+  }
+
+  const users = storage.get(AUTH_USERS_KEY) || [];
+
+  if (currentMode === 'register') {
+    if (!email || !confirmPassword) {
+      if (authMessage) authMessage.textContent = 'Vui lòng nhập email và xác nhận mật khẩu.';
+      return;
+    }
+
+    if (password.length < 4) {
+      if (authMessage) authMessage.textContent = 'Mật khẩu phải có ít nhất 4 ký tự.';
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      if (authMessage) authMessage.textContent = 'Mật khẩu xác nhận không khớp.';
+      return;
+    }
+
+    const existingUser = users.find(user => user.username === username || user.email === email);
+    if (existingUser) {
+      if (authMessage) authMessage.textContent = 'Tên đăng nhập hoặc email đã tồn tại.';
+      return;
+    }
+
+    const newUser = {
+      id: 'user_' + Date.now(),
+      username,
+      email,
+      password
+    };
+
+    users.push(newUser);
+    storage.set(AUTH_USERS_KEY, users);
+    sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(newUser));
+    showToast('Đăng ký thành công!');
+    closeAuthModal();
+    updateAuthButton();
+    handlePendingAuthAction();
+    window.location.reload();
+    return;
+  }
+
+  const foundUser = users.find(user => (user.username === username || user.email === username) && user.password === password);
+  if (!foundUser) {
+    if (authMessage) authMessage.textContent = 'Tài khoản hoặc mật khẩu không đúng.';
+    return;
+  }
+
+  sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(foundUser));
+  showToast(`Đăng nhập thành công, xin chào ${foundUser.username}!`);
+  closeAuthModal();
+  updateAuthButton();
+  handlePendingAuthAction();
+  window.location.reload();
+}
+
+function handlePendingAuthAction() {
+  if (!pendingAuthAction) return;
+
+  const { type, petId } = pendingAuthAction;
+  pendingAuthAction = null;
+
+  if (type === 'adoption') {
+    goToAdoptionForm(petId);
+  } else if (type === 'favorite') {
+    toggleFavorite(petId);
+  }
+}
+
+function updateAuthButton() {
+  const button = document.getElementById('authNavbarBtn');
+  const currentUser = getCurrentUser();
+  if (!button) return;
+
+  if (currentUser) {
+    button.textContent = `👋 ${currentUser.username}`;
+    button.classList.add('is-logged-in');
+  } else {
+    button.textContent = '🔐 Đăng nhập';
+    button.classList.remove('is-logged-in');
+  }
+}
+
+function handleLogout() {
+  sessionStorage.removeItem(AUTH_SESSION_KEY);
+  updateAuthButton();
+  showToast('Đã đăng xuất');
+  setTimeout(() => window.location.reload(), 300);
+}
 
 function openAdminModal() {
   const modal = document.getElementById('adminModal');
@@ -981,6 +1439,21 @@ function setupModalCloseButtons() {
   });
 }
 
+function setupAdminModalEvents() {
+  const adminTrigger = document.getElementById('openAdminModal');
+  if (adminTrigger) {
+    adminTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAdminModal();
+    });
+  }
+
+  const adminForm = document.getElementById('adminLoginForm');
+  if (adminForm) {
+    adminForm.addEventListener('submit', handleAdminLogin);
+  }
+}
+
 // ============================================
 // 12. APP INITIALIZATION (TRÁI TIM CỦA ỨNG DỤNG - ĐÃ FIX LỖI MẤT DỮ LIỆU)
 // ============================================
@@ -989,27 +1462,35 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 1. Tải giao diện màu (Sáng / Tối)
   loadThemePreference();
 
-  // 2. Cài đặt các sự kiện cho Modal
-  setupModalCloseButtons();
+  // 2. Khởi tạo hệ thống đăng nhập / đăng ký
+  initAuthSystem();
 
-  // 3. QUAN TRỌNG: Gọi API lấy dữ liệu và chờ tải xong mới làm bước tiếp theo
+  // 3. Cài đặt các sự kiện cho Modal
+  setupModalCloseButtons();
+  setupAdminModalEvents();
+
+  // 4. QUAN TRỌNG: Gọi API lấy dữ liệu và chờ tải xong mới làm bước tiếp theo
   await fetchPets(); 
 
-  // 4. Khởi chạy các hàm render tùy thuộc vào việc người dùng đang ở trang HTML nào
+  // 5. Khởi chạy các hàm render tùy thuộc vào việc người dùng đang ở trang HTML nào
   
   // ---> Đang ở trang Thú cưng (pets.html)
   if (document.getElementById('petsContainer')) {
     renderPaginatedPets();
+    setupPetsGridEventDelegation();  // ✅ Gán Event Delegation cho pet cards
     setupFilterListeners();
   }
 
   // ---> Đang ở Trang chủ (index.html)
   if (document.getElementById('homePets')) {
     renderHomePets();
+    setupHomeEventDelegation();  // ✅ Gán Event Delegation cho home pet cards
   }
 
   // ---> Đang ở trang Hồ sơ cá nhân (profile.html)
   if (document.getElementById('profileFavoritesList') || document.getElementById('profileHistoryList')) {
+    // Refresh adoption data từ MockAPI trước khi render
+    refreshUserAdoptionsFromAPI();
     renderProfilePage();
   }
 

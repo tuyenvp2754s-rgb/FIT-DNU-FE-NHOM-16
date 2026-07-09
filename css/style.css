@@ -146,7 +146,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--space-3xl);
+  gap: var(--space-2xl);
 }
 
 .logo {
@@ -163,16 +163,19 @@ a:hover {
 
 .navbar nav {
   display: flex;
-  gap: var(--space-3xl);
+  gap: var(--space-lg);
   flex: 1;
+  align-items: center;
 }
 
 .navbar nav a {
   color: var(--gray-500);
   font-weight: 500;
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-sm);
   transition: all var(--duration-base);
+  white-space: nowrap;
+  font-size: 0.95rem;
 }
 
 .navbar nav a:hover,
@@ -1609,6 +1612,128 @@ input:checked + .slider:before {
   }
 }
 
+/* ================================================
+   AUTHENTICATION UI
+   ================================================ */
+
+.auth-navbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.9rem 1.25rem;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(249, 115, 22, 0.2);
+  transition: background 0.25s ease, color 0.25s ease, transform 0.15s ease;
+}
+
+.auth-navbar-btn:hover {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  transform: translateY(-1px);
+}
+
+.auth-navbar-btn.is-logged-in {
+  background: linear-gradient(135deg, #111827, #1f2937);
+}
+
+.auth-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.auth-modal.active {
+  display: flex;
+}
+
+.auth-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.auth-modal__dialog {
+  position: relative;
+  width: min(92vw, 440px);
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.auth-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.auth-modal__header h3 {
+  margin: 0 0 8px;
+  color: #111827;
+}
+
+.auth-modal__header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.auth-modal__tabs {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0 12px;
+}
+
+.auth-tab {
+  flex: 1;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 999px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.auth-tab.active {
+  background: #111827;
+  color: #fff;
+  border-color: #111827;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.auth-message {
+  min-height: 20px;
+  margin-top: 12px;
+  color: #ef4444;
+  font-size: 14px;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 0 var(--space-md);
@@ -1657,6 +1782,11 @@ input:checked + .slider:before {
     width: 100%;
     flex-direction: column;
     gap: var(--space-md);
+  }
+
+  .auth-navbar-btn {
+    padding: 10px 14px;
+    font-size: 14px;
   }
 
   .navbar nav a {

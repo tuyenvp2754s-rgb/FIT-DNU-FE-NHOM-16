@@ -1,305 +1,620 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>PetAdopt Admin Full</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PetAdopt Admin - Quản Trị Hệ Thống</title>
+    <script>
+      const ADMIN_AUTH_KEY = "adminAuth";
+      const ADMIN_TOKEN_KEY = "adminToken";
+      const LOGIN_PAGE = "login.html";
 
-<style>
-:root{
-  --bg:#f3f4f6;
-  --sidebar:#111827;
-  --green:#10b981;
-}
+      function isAdminLoggedIn() {
+        const hasFlag =
+          localStorage.getItem(ADMIN_AUTH_KEY) === "true" ||
+          sessionStorage.getItem(ADMIN_AUTH_KEY) === "true";
+        const hasToken = Boolean(
+          localStorage.getItem(ADMIN_TOKEN_KEY) ||
+          sessionStorage.getItem(ADMIN_TOKEN_KEY),
+        );
+        return hasFlag && hasToken;
+      }
 
-body{
-  margin:0;
-  font-family:sans-serif;
-  display:flex;
-  background:var(--bg);
-}
+      if (
+        !window.location.pathname.includes("login.html") &&
+        !isAdminLoggedIn()
+      ) {
+        window.location.replace(
+          `${LOGIN_PAGE}?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`,
+        );
+      }
+    </script>
+    <!-- Nhúng Bootstrap 5 và FontAwesome để giao diện hiện đại, scannable -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .sidebar {
+        background-color: #1e293b;
+        min-height: 100vh;
+        color: #fff;
+      }
+      .sidebar .nav-link {
+        color: #cbd5e1;
+        transition: all 0.3s;
+      }
+      .sidebar .nav-link:hover,
+      .sidebar .nav-link.active {
+        background-color: #334155;
+        color: #fff;
+        border-radius: 8px;
+      }
+      .card-custom {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .status-badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- SIDEBAR -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse p-3">
+          <div class="d-flex align-items-center mb-4 ps-2">
+            <i class="fa-solid fa-paw text-success fs-3 me-2"></i>
+            <h4 class="m-0 fw-bold text-success">PetAdopt</h4>
+          </div>
+          <ul class="nav flex-column gap-2">
+            <li class="nav-item">
+              <a
+                href="#"
+                class="nav-link active"
+                onclick="switchTab('dashboard', event)"
+                ><i class="fa-solid fa-chart-pie me-2"></i> Dashboard</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" onclick="switchTab('pets', event)"
+                ><i class="fa-solid fa-dog me-2"></i> Quản lý Thú Cưng</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                href="#"
+                class="nav-link"
+                onclick="switchTab('adoptions', event)"
+                ><i class="fa-solid fa-file-invoice me-2"></i> Hồ Sơ Nhận
+                Nuôi</a
+              >
+            </li>
+            <hr class="text-secondary" />
+            <li class="nav-item">
+              <a href="index.html" class="nav-link text-warning"
+                ><i class="fa-solid fa-house me-2"></i> Quay về trang chủ</a
+              >
+            </li>
+          </ul>
+        </nav>
 
-/* LOGIN */
-#login{
-  position:fixed;
-  inset:0;
-  background:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-}
+        <!-- MAIN CONTENT -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+          <!-- SECTION 1: DASHBOARD -->
+          <div id="tab-dashboard" class="tab-content">
+            <h2 class="mb-4 fw-bold text-dark">Dashboard</h2>
+            <div class="row g-3 mb-4">
+              <div class="col-6 col-lg-3">
+                <div class="card card-custom p-3 bg-white text-dark">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <div>
+                      <h6 class="text-muted">Tổng Thú Cưng</h6>
+                      <h3 class="fw-bold m-0" id="count-pets">0</h3>
+                    </div>
+                    <i class="fa-solid fa-dog fs-2 text-primary"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 col-lg-3">
+                <div class="card card-custom p-3 bg-white text-dark">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <div>
+                      <h6 class="text-muted">Tổng Hồ Sơ</h6>
+                      <h3 class="fw-bold m-0" id="count-total-ads">0</h3>
+                    </div>
+                    <i class="fa-solid fa-file-alt fs-2 text-info"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 col-lg-3">
+                <div class="card card-custom p-3 bg-white text-dark">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <div>
+                      <h6 class="text-muted">Chờ Duyệt</h6>
+                      <h3 class="fw-bold m-0 text-warning" id="count-pending">
+                        0
+                      </h3>
+                    </div>
+                    <i class="fa-solid fa-clock fs-2 text-warning"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 col-lg-3">
+                <div class="card card-custom p-3 bg-white text-dark">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <div>
+                      <h6 class="text-muted">Đã Duyệt</h6>
+                      <h3 class="fw-bold m-0 text-success" id="count-approved">
+                        0
+                      </h3>
+                    </div>
+                    <i class="fa-solid fa-circle-check fs-2 text-success"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-.login-box{
-  padding:40px;
-  border:1px solid #ddd;
-  border-radius:12px;
-  text-align:center;
-}
+          <!-- SECTION 2: QUẢN LÝ THÚ CƯNG -->
+          <div id="tab-pets" class="tab-content d-none">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h2 class="fw-bold m-0">Quản Lý Thú Cưng</h2>
+              <button class="btn btn-success" onclick="openPetModal()">
+                <i class="fa-solid fa-plus me-1"></i> Thêm Thú Cưng
+              </button>
+            </div>
+            <div class="card card-custom p-3">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>ID</th>
+                      <th>Hình ảnh</th>
+                      <th>Tên</th>
+                      <th>Loại</th>
+                      <th>Trạng thái</th>
+                      <th>Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pet-table-body">
+                    <!-- Dữ liệu render từ JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
 
-input{
-  padding:10px;
-  margin:10px 0;
-  width:220px;
-}
-
-/* SIDEBAR */
-.sidebar{
-  width:260px;
-  height:100vh;
-  background:var(--sidebar);
-  color:white;
-  padding:20px;
-  position:fixed;
-}
-
-.sidebar h2{ color:var(--green); }
-
-.menu div{
-  padding:12px;
-  margin:8px 0;
-  cursor:pointer;
-  border-radius:8px;
-}
-
-.menu div:hover{ background:#1f2937; }
-
-/* MAIN */
-.main{
-  margin-left:260px;
-  padding:30px;
-  width:100%;
-}
-
-.hidden{ display:none; }
-
-.card{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  margin-bottom:20px;
-}
-
-table{
-  width:100%;
-  background:white;
-  border-collapse:collapse;
-}
-
-th,td{
-  padding:12px;
-  border-bottom:1px solid #eee;
-}
-
-th{ background:#e5e7eb; }
-
-.btn{
-  padding:6px 12px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.btn-add{ background:#10b981; color:white; }
-.btn-del{ background:#ef4444; color:white; }
-.btn-ok{ background:#3b82f6; color:white; }
-</style>
-</head>
-
-<body>
-
-<!-- LOGIN -->
-<div id="login">
-  <div class="login-box">
-    <h2>Admin Login</h2>
-
-    <input id="username" placeholder="username">
-    <input id="password" type="password" placeholder="password">
-
-    <button onclick="login()" class="btn btn-add">Login</button>
-
-    <p id="error" style="color:red"></p>
-  </div>
-</div>
-
-<!-- APP -->
-<div id="app" class="hidden">
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <h2>🐾 PetAdopt</h2>
-
-    <div class="menu">
-      <div onclick="show('dashboard')">📊 Dashboard</div>
-      <div onclick="show('pets')">🐶 Pets</div>
-      <div onclick="show('adopt')">📋 Adoptions</div>
-      <div onclick="goHome()">🏠 Quay về trang chủ</div>
-    </div>
-  </div>
-
-  <!-- MAIN -->
-  <div class="main">
-
-    <section id="dashboard">
-      <h1>Dashboard</h1>
-      <div class="card" id="stat">Loading...</div>
-    </section>
-
-    <section id="pets" class="hidden">
-      <h1>Pets</h1>
-
-      <div class="card">
-        <input id="petName" placeholder="Tên thú cưng">
-        <button class="btn btn-add" onclick="addPet()">+ Thêm</button>
+          <!-- SECTION 3: QUẢN LÝ HỒ SƠ NHẬN NUÔI -->
+          <div id="tab-adoptions" class="tab-content d-none">
+            <h2 class="fw-bold mb-4">Quản Lý Hồ Sơ Nhận Nuôi</h2>
+            <div class="card card-custom p-3">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Mã Đơn</th>
+                      <th>Người Đăng Ký</th>
+                      <th>Thông Tin Liên Hệ</th>
+                      <th>Thú Cưng Chọn</th>
+                      <th>Trạng Thái</th>
+                      <th>Thao Tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adoption-table-body">
+                    <!-- Dữ liệu render từ JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
+    </div>
 
-      <table>
-        <thead>
-          <tr><th>ID</th><th>Name</th><th>Action</th></tr>
-        </thead>
-        <tbody id="petTable"></tbody>
-      </table>
-    </section>
+    <!-- MODAL THÊM / SỬA THÚ CƯNG -->
+    <div class="modal fade" id="petModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitle">Thêm Thú Cưng</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="petForm">
+              <input type="hidden" id="petId" />
+              <div class="mb-3">
+                <label class="form-label">Tên thú cưng</label
+                ><input
+                  type="text"
+                  id="petName"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Loại (Chó/Mèo...)</label
+                ><input
+                  type="text"
+                  id="petType"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Link URL Hình Ảnh</label
+                ><input
+                  type="text"
+                  id="petImg"
+                  class="form-control"
+                  placeholder="https://..."
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Hủy
+            </button>
+            <button type="button" class="btn btn-primary" onclick="savePet()">
+              Lưu Lại
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <section id="adopt" class="hidden">
-      <h1>Adoptions</h1>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-      <table>
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Pet</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="adTable"></tbody>
-      </table>
-    </section>
+    <script>
+      const PETS_API_URL =
+        "https://6a0d322e769682b8ee75c462.mockapi.io/api/v1/pets";
+      let petModalObj = null;
+      let allPets = [];
 
-  </div>
-</div>
+      function ensureDefaultData() {
+        if (!localStorage.getItem("adoptionData")) {
+          localStorage.setItem(
+            "adoptionData",
+            JSON.stringify([
+              {
+                id: "HD102",
+                userName: "Nguyễn Văn A",
+                phone: "0901234567",
+                email: "a@gmail.com",
+                petName: "Cậu Vàng",
+                status: "Chờ duyệt",
+              },
+              {
+                id: "HD103",
+                userName: "Trần Thị B",
+                phone: "0987654321",
+                email: "b@gmail.com",
+                petName: "Miu Miu",
+                status: "Đã duyệt",
+              },
+            ]),
+          );
+        }
+      }
 
-<script>
+      function normalizePet(rawPet) {
+        return {
+          id: rawPet.id ?? rawPet._id ?? "",
+          name: rawPet.name || rawPet.petName || "Tên chưa có",
+          type: rawPet.type || rawPet.species || rawPet.loai || "Không rõ",
+          img: rawPet.img || rawPet.image || rawPet.avatar || "",
+          image: rawPet.image || rawPet.img || rawPet.avatar || "",
+          status:
+            rawPet.status || (rawPet.adopted ? "Đã nhận nuôi" : "Sẵn sàng"),
+          age: rawPet.age || rawPet.tuoi || "",
+          gender: rawPet.gender || rawPet.gioiTinh || "",
+          description: rawPet.description || "",
+        };
+      }
 
-const API_PETS = "https://6a0d322e769682b8ee75c462.mockapi.io/api/v1/pets";
-const API_ADS  = "https://6a0d322e769682b8ee75c462.mockapi.io/api/v1/adoptions";
+      async function loadPetsFromApi() {
+        try {
+          const response = await fetch(PETS_API_URL);
+          if (!response.ok) throw new Error("Không thể tải dữ liệu thú cưng");
 
-/* LOGIN FIX CHUẨN */
-function login(){
+          const data = await response.json();
+          allPets = Array.isArray(data) ? data.map(normalizePet) : [];
+          localStorage.setItem("petsData", JSON.stringify(allPets));
+          renderAll();
+        } catch (error) {
+          console.error(error);
+          const savedPets = JSON.parse(
+            localStorage.getItem("petsData") || "[]",
+          );
+          allPets = Array.isArray(savedPets) ? savedPets : [];
+          renderAll();
+        }
+      }
 
-  const u = document.getElementById("username").value.trim();
-  const p = document.getElementById("password").value.trim();
+      async function loadAdoptionsFromApi() {
+        try {
+          const response = await fetch(
+            "https://6a0d322e769682b8ee75c462.mockapi.io/api/v1/adoptions",
+          );
+          if (!response.ok) throw new Error("Không thể tải dữ liệu hồ sơ");
 
-  const err = document.getElementById("error");
+          const data = await response.json();
+          const adoptions = Array.isArray(data) ? data : [];
+          localStorage.setItem("adoptionData", JSON.stringify(adoptions));
+          renderAll();
+        } catch (error) {
+          console.error("Lỗi tải hồ sơ từ API:", error);
+          const savedAdoptions = JSON.parse(
+            localStorage.getItem("adoptionData") || "[]",
+          );
+          renderAll();
+        }
+      }
 
-  if(u === "admin" && p === "admin"){
-    document.getElementById("login").style.display = "none";
-    document.getElementById("app").classList.remove("hidden");
+      function switchTab(tabName, eventArg) {
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((el) => el.classList.add("d-none"));
+        document
+          .querySelectorAll(".sidebar .nav-link")
+          .forEach((el) => el.classList.remove("active"));
 
-    load();
-    setInterval(load, 8000);
-  } else {
-    err.innerText = "Sai tài khoản hoặc mật khẩu";
-  }
-}
+        const targetTab = document.getElementById(`tab-${tabName}`);
+        if (targetTab) {
+          targetTab.classList.remove("d-none");
+        }
 
-/* NAV */
-function show(id){
-  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
-}
+        const activeLink = eventArg?.currentTarget;
+        if (activeLink) {
+          activeLink.classList.add("active");
+        }
 
-/* BACK HOME */
-function goHome(){
-  window.location.href = "index.html";
-}
+        // Reload dữ liệu khi switch tab
+        if (tabName === "adoptions") {
+          loadAdoptionsFromApi();
+        } else {
+          renderAll();
+        }
+      }
 
-/* LOAD DATA */
-async function load(){
+      function renderAll() {
+        const pets =
+          Array.isArray(allPets) && allPets.length > 0
+            ? allPets
+            : JSON.parse(localStorage.getItem("petsData") || "[]");
+        const adoptions = JSON.parse(
+          localStorage.getItem("adoptionData") || "[]",
+        );
 
-  try{
+        document.getElementById("count-pets").innerText = pets.length;
+        document.getElementById("count-total-ads").innerText = adoptions.length;
+        document.getElementById("count-pending").innerText = adoptions.filter(
+          (a) => a.status === "Chờ duyệt",
+        ).length;
+        document.getElementById("count-approved").innerText = adoptions.filter(
+          (a) => a.status === "Đã duyệt",
+        ).length;
 
-    const [pets, ads] = await Promise.all([
-      fetch(API_PETS).then(r=>r.json()),
-      fetch(API_ADS).then(r=>r.json())
-    ]);
+        let petHtml = "";
+        if (!pets.length) {
+          petHtml =
+            '<tr><td colspan="6" class="text-center text-muted">Đang tải dữ liệu từ MockAPI...</td></tr>';
+        } else {
+          pets.forEach((pet) => {
+            const petImage =
+              pet.img || pet.image || "https://via.placeholder.com/80";
+            const statusClass =
+              pet.status === "Sẵn sàng" ? "bg-success" : "bg-secondary";
+            petHtml += `
+              <tr>
+                <td>${pet.id}</td>
+                <td><img src="${petImage}" class="rounded" width="50" height="50" style="object-fit:cover"></td>
+                <td><strong>${pet.name}</strong></td>
+                <td>${pet.type}</td>
+                <td><span class="badge ${statusClass}">${pet.status}</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary me-1" onclick="openPetModal(${pet.id})"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn btn-sm btn-outline-danger" onclick="deletePet(${pet.id})"><i class="fa-solid fa-trash"></i></button>
+                </td>
+              </tr>`;
+          });
+        }
+        document.getElementById("pet-table-body").innerHTML = petHtml;
 
-    document.getElementById("stat").innerHTML = `
-      🐶 Pets: ${pets.length} <br>
-      📋 Ads: ${ads.length} <br>
-      🟡 Pending: ${ads.filter(a=>a.status==="pending").length} <br>
-      🟢 Approved: ${ads.filter(a=>a.status==="approved").length}
-    `;
+        let adoptHtml = "";
+        adoptions.forEach((item) => {
+          const badgeClass =
+            item.status === "Chờ duyệt" ? "bg-warning text-dark" : "bg-success";
+          const actionBtn =
+            item.status === "Chờ duyệt"
+              ? `<button class="btn btn-sm btn-success" onclick="approveAdoption('${item.id}')"><i class="fa-solid fa-check me-1"></i>Duyệt Đơn</button>`
+              : `<span class="text-success fw-bold"><i class="fa-solid fa-circle-check"></i> Hoàn tất</span>`;
 
-    document.getElementById("petTable").innerHTML =
-      pets.map(p=>`
-        <tr>
-          <td>${p.id}</td>
-          <td>${p.name}</td>
-          <td><button class="btn btn-del" onclick="delPet('${p.id}')">Xóa</button></td>
-        </tr>
-      `).join("");
+          adoptHtml += `
+            <tr>
+              <td><mark class="fw-bold">${item.id}</mark></td>
+              <td><strong>${item.userName}</strong></td>
+              <td><small><i class="fa-solid fa-phone"></i> ${item.phone}<br><i class="fa-solid fa-envelope"></i> ${item.email}</small></td>
+              <td><span class="text-primary fw-bold">${item.petName}</span></td>
+              <td><span class="badge ${badgeClass}">${item.status}</span></td>
+              <td>${actionBtn}</td>
+            </tr>`;
+        });
+        document.getElementById("adoption-table-body").innerHTML = adoptHtml;
+      }
 
-    document.getElementById("adTable").innerHTML =
-      ads.map(a=>`
-        <tr>
-          <td>${a.name || "User"}</td>
-          <td>${a.petName || "Pet"}</td>
-          <td>${badge(a.status)}</td>
-          <td>
-            ${
-              a.status === "approved"
-              ? "✅"
-              : `<button class="btn btn-ok" onclick="approve('${a.id}')">Duyệt</button>`
-            }
-          </td>
-        </tr>
-      `).join("");
+      function openPetModal(id = null) {
+        document.getElementById("petForm").reset();
+        document.getElementById("petId").value = id || "";
+        document.getElementById("modalTitle").innerText = id
+          ? "Chỉnh Sửa Thú Cưng"
+          : "Thêm Thú Cưng Mới";
 
-  } catch(e){
-    console.log("API error", e);
-  }
-}
+        if (id) {
+          const pet =
+            allPets.find((p) => p.id === id) ||
+            JSON.parse(localStorage.getItem("petsData") || "[]").find(
+              (p) => p.id === id,
+            );
+          if (pet) {
+            document.getElementById("petName").value = pet.name;
+            document.getElementById("petType").value = pet.type;
+            document.getElementById("petImg").value =
+              pet.img || pet.image || "";
+          }
+        }
 
-/* STATUS */
-function badge(s){
-  if(s==="approved") return "🟢 approved";
-  if(s==="rejected") return "🔴 rejected";
-  return "🟡 pending";
-}
+        petModalObj.show();
+      }
 
-/* PET */
-async function addPet(){
-  const name = document.getElementById("petName").value.trim();
-  if(!name) return;
+      async function savePet() {
+        const id = document.getElementById("petId").value;
+        const name = document.getElementById("petName").value.trim();
+        const type = document.getElementById("petType").value.trim();
+        const img = document.getElementById("petImg").value.trim();
 
-  await fetch(API_PETS,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({name})
-  });
+        if (!name || !type || !img) {
+          return alert("Vui lòng nhập đầy đủ thông tin!");
+        }
 
-  document.getElementById("petName").value="";
-  load();
-}
+        const payload = {
+          name,
+          type,
+          img,
+          image: img,
+          status: "Sẵn sàng",
+        };
 
-async function delPet(id){
-  await fetch(`${API_PETS}/${id}`,{method:"DELETE"});
-  load();
-}
+        try {
+          if (id) {
+            const response = await fetch(`${PETS_API_URL}/${id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            if (!response.ok) throw new Error("Cập nhật thú cưng thất bại");
+          } else {
+            const response = await fetch(PETS_API_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            if (!response.ok) throw new Error("Thêm thú cưng thất bại");
+          }
 
-/* ADOPTION */
-async function approve(id){
-  await fetch(`${API_ADS}/${id}`,{
-    method:"PUT",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({status:"approved"})
-  });
+          await loadPetsFromApi();
+          petModalObj.hide();
+        } catch (error) {
+          console.error(error);
+          alert(error.message || "Có lỗi xảy ra khi lưu thú cưng");
+        }
+      }
 
-  load();
-}
+      async function deletePet(id) {
+        if (!confirm("Bạn có chắc chắn muốn xóa thú cưng này không?")) return;
 
-</script>
+        try {
+          const response = await fetch(`${PETS_API_URL}/${id}`, {
+            method: "DELETE",
+          });
+          if (!response.ok) throw new Error("Xóa thú cưng thất bại");
+          await loadPetsFromApi();
+        } catch (error) {
+          console.error(error);
+          alert(error.message || "Có lỗi xảy ra khi xóa thú cưng");
+        }
+      }
 
-</body>
+      async function approveAdoption(id) {
+        try {
+          // Lấy adoption record hiện tại
+          let adoptions = JSON.parse(
+            localStorage.getItem("adoptionData") || "[]",
+          );
+          const adoptionIndex = adoptions.findIndex((item) => item.id === id);
+
+          if (adoptionIndex === -1) {
+            alert("Không tìm thấy hồ sơ nhận nuôi");
+            return;
+          }
+
+          const adoption = adoptions[adoptionIndex];
+
+          // PUT lên MockAPI để cập nhật status
+          const response = await fetch(
+            `https://6a0d322e769682b8ee75c462.mockapi.io/api/v1/adoptions/${id}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                ...adoption,
+                status: "Đã duyệt",
+              }),
+            },
+          );
+
+          if (!response.ok) throw new Error("Duyệt hồ sơ thất bại");
+
+          // Cập nhật localStorage
+          adoptions[adoptionIndex].status = "Đã duyệt";
+          localStorage.setItem("adoptionData", JSON.stringify(adoptions));
+
+          // Cập nhật status thú cưng
+          const pets = JSON.parse(localStorage.getItem("petsData") || "[]");
+          const updatedPets = pets.map((p) =>
+            p.name === adoption.petName ? { ...p, status: "Đã nhận nuôi" } : p,
+          );
+          localStorage.setItem("petsData", JSON.stringify(updatedPets));
+          allPets = updatedPets;
+
+          alert("Duyệt hồ sơ thành công!");
+          renderAll();
+        } catch (error) {
+          console.error(error);
+          alert(error.message || "Có lỗi xảy ra khi duyệt hồ sơ");
+        }
+      }
+
+      function initAdminPage() {
+        ensureDefaultData();
+        petModalObj = new bootstrap.Modal(document.getElementById("petModal"));
+        loadPetsFromApi();
+        loadAdoptionsFromApi();
+      }
+
+      window.addEventListener("DOMContentLoaded", initAdminPage);
+    </script>
+  </body>
 </html>

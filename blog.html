@@ -1,587 +1,296 @@
 <!-- blog.html -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta charset="UTF-8">
+    <title>Tin tức & Kiến thức - PetAdopt</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
+    <!-- FONT -->
 
-  <title>
-    Tin tức & Kiến thức - PetAdopt
-  </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
 
-  <!-- FONT -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
-  <link rel="preconnect"
-    href="https://fonts.googleapis.com">
+    <!-- CSS -->
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-  <!-- CSS -->
+  <body>
+    <!-- NAVBAR -->
 
-  <link
-    rel="stylesheet"
-    href="css/style.css">
+    <header class="navbar">
+      <div class="container nav-wrapper">
+        <a href="index.html" class="logo"> 🐾 PetAdopt </a>
 
-</head>
+        <nav>
+          <a href="index.html"> Trang chủ </a>
 
-<body>
+          <a href="pets.html"> Thú cưng </a>
 
-  <!-- NAVBAR -->
+          <a href="history.html"> Lịch sử </a>
 
-  <header class="navbar">
+          <a href="blog.html" class="active"> Tin tức </a>
 
-    <div class="container nav-wrapper">
+          <a href="profile.html"> Hồ sơ </a>
+        </nav>
+      </div>
+    </header>
 
-      <a
-        href="index.html"
-        class="logo">
+    <!-- HERO -->
 
-        🐾 PetAdopt
+    <section class="blog-hero">
+      <div class="container">
+        <span class="badge"> 📚 Kiến thức thú cưng </span>
 
-      </a>
+        <h1>Chăm sóc thú cưng đúng cách</h1>
 
-      <nav>
+        <p>Khám phá các kiến thức, mẹo chăm sóc và kinh nghiệm nhận nuôi.</p>
+      </div>
+    </section>
 
-        <a href="index.html">
-          Trang chủ
-        </a>
+    <!-- BLOG SECTION -->
 
-        <a href="pets.html">
-          Thú cưng
-        </a>
+    <section class="section pt-0">
+      <div class="container">
+        <div class="blog-layout">
+          <!-- LEFT -->
 
-        <a href="history.html">
-          Lịch sử
-        </a>
+          <div class="blog-left">
+            <!-- FEATURED -->
 
-        <a
-          href="blog.html"
-          class="active">
-
-          Tin tức
-        </a>
-
-        <a href="profile.html">
-          Hồ sơ
-        </a>
-
-      </nav>
-
-      <a
-        href="pets.html"
-        class="btn btn-primary">
-
-        Nhận nuôi ngay
-
-      </a>
-
-    </div>
-
-  </header>
-
-  <!-- HERO -->
-
-  <section class="blog-hero">
-
-    <div class="container">
-
-      <span class="badge">
-
-        📚 Kiến thức thú cưng
-
-      </span>
-
-      <h1>
-
-        Chăm sóc thú cưng đúng cách
-
-      </h1>
-
-      <p>
-
-        Khám phá các kiến thức,
-        mẹo chăm sóc và kinh nghiệm nhận nuôi.
-
-      </p>
-
-    </div>
-
-  </section>
-
-  <!-- BLOG SECTION -->
-
-  <section class="section pt-0">
-
-    <div class="container">
-
-      <div class="blog-layout">
-
-        <!-- LEFT -->
-
-        <div class="blog-left">
-
-          <!-- FEATURED -->
-
-          <div class="featured-article">
-
-            <img
-              src="https://images.unsplash.com/photo-1517849845537-4d257902454a">
-
-            <div class="featured-content">
-
-              <span class="badge">
-
-                Bài viết nổi bật
-
-              </span>
-
-              <h2>
-
-                10 điều cần biết trước khi nhận nuôi thú cưng
-
-              </h2>
-
-              <p>
-
-                Những kinh nghiệm quan trọng giúp bạn
-                chuẩn bị tốt hơn cho hành trình nhận nuôi.
-
-              </p>
-
-              <a
-                href="article.html"
-                class="btn btn-primary">
-
-                Đọc bài viết
-
-              </a>
-
-            </div>
-
-          </div>
-
-          <!-- SEARCH -->
-
-          <div class="blog-search">
-
-            <input
-              type="text"
-              placeholder="Tìm kiếm bài viết...">
-
-          </div>
-
-          <!-- GRID -->
-
-          <div class="blog-grid">
-
-            <!-- CARD -->
-
-            <div class="card blog-card">
-
+            <div class="featured-article">
               <img
-                src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b">
+                src="https://images.unsplash.com/photo-1517849845537-4d257902454a"
+              />
 
-              <div class="blog-card-content">
+              <div class="featured-content">
+                <span class="badge"> Bài viết nổi bật </span>
 
-                <span class="blog-category">
-
-                  Chăm sóc chó
-
-                </span>
-
-                <h3>
-
-                  Cách huấn luyện chó con hiệu quả
-
-                </h3>
+                <h2>10 điều cần biết trước khi nhận nuôi thú cưng</h2>
 
                 <p>
-
-                  Những phương pháp đơn giản
-                  giúp chó con nghe lời hơn.
-
+                  Những kinh nghiệm quan trọng giúp bạn chuẩn bị tốt hơn cho
+                  hành trình nhận nuôi.
                 </p>
 
-                <div class="blog-meta">
-
-                  <span>
-                    ⏱ 5 phút đọc
-                  </span>
-
-                  <span>
-                    📅 22/05/2026
-                  </span>
-
-                </div>
-
-                <a
-                  href="article.html"
-                  class="btn btn-outline">
-
-                  Xem thêm
-
+                <a href="article.html" class="btn btn-primary">
+                  Đọc bài viết
                 </a>
-
               </div>
-
             </div>
 
-            <!-- CARD -->
+            <!-- SEARCH -->
 
-            <div class="card blog-card">
-
-              <img
-                src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131">
-
-              <div class="blog-card-content">
-
-                <span class="blog-category">
-
-                  Chăm sóc mèo
-
-                </span>
-
-                <h3>
-
-                  Dinh dưỡng cần thiết cho mèo con
-
-                </h3>
-
-                <p>
-
-                  Những thực phẩm giúp mèo phát triển khỏe mạnh.
-
-                </p>
-
-                <div class="blog-meta">
-
-                  <span>
-                    ⏱ 7 phút đọc
-                  </span>
-
-                  <span>
-                    📅 20/05/2026
-                  </span>
-
-                </div>
-
-                <a
-                  href="article.html"
-                  class="btn btn-outline">
-
-                  Xem thêm
-
-                </a>
-
-              </div>
-
+            <div class="blog-search">
+              <input type="text" placeholder="Tìm kiếm bài viết..." />
             </div>
 
-            <!-- CARD -->
+            <!-- GRID -->
 
-            <div class="card blog-card">
+            <div class="blog-grid">
+              <!-- CARD -->
 
-              <img
-                src="https://images.unsplash.com/photo-1517849845537-4d257902454a">
+              <div class="card blog-card">
+                <img
+                  src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b"
+                />
 
-              <div class="blog-card-content">
+                <div class="blog-card-content">
+                  <span class="blog-category"> Chăm sóc chó </span>
 
-                <span class="blog-category">
+                  <h3>Cách huấn luyện chó con hiệu quả</h3>
 
-                  Nhận nuôi
+                  <p>Những phương pháp đơn giản giúp chó con nghe lời hơn.</p>
 
-                </span>
+                  <div class="blog-meta">
+                    <span> ⏱ 5 phút đọc </span>
 
-                <h3>
+                    <span> 📅 22/05/2026 </span>
+                  </div>
 
-                  Chuẩn bị nhà cửa trước khi đón thú cưng
-
-                </h3>
-
-                <p>
-
-                  Các bước quan trọng để tạo môi trường an toàn.
-
-                </p>
-
-                <div class="blog-meta">
-
-                  <span>
-                    ⏱ 6 phút đọc
-                  </span>
-
-                  <span>
-                    📅 18/05/2026
-                  </span>
-
+                  <a href="article.html" class="btn btn-outline"> Xem thêm </a>
                 </div>
-
-                <a
-                  href="article.html"
-                  class="btn btn-outline">
-
-                  Xem thêm
-
-                </a>
-
               </div>
 
-            </div>
+              <!-- CARD -->
 
+              <div class="card blog-card">
+                <img
+                  src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131"
+                />
+
+                <div class="blog-card-content">
+                  <span class="blog-category"> Chăm sóc mèo </span>
+
+                  <h3>Dinh dưỡng cần thiết cho mèo con</h3>
+
+                  <p>Những thực phẩm giúp mèo phát triển khỏe mạnh.</p>
+
+                  <div class="blog-meta">
+                    <span> ⏱ 7 phút đọc </span>
+
+                    <span> 📅 20/05/2026 </span>
+                  </div>
+
+                  <a href="article.html" class="btn btn-outline"> Xem thêm </a>
+                </div>
+              </div>
+
+              <!-- CARD -->
+
+              <div class="card blog-card">
+                <img
+                  src="https://images.unsplash.com/photo-1517849845537-4d257902454a"
+                />
+
+                <div class="blog-card-content">
+                  <span class="blog-category"> Nhận nuôi </span>
+
+                  <h3>Chuẩn bị nhà cửa trước khi đón thú cưng</h3>
+
+                  <p>Các bước quan trọng để tạo môi trường an toàn.</p>
+
+                  <div class="blog-meta">
+                    <span> ⏱ 6 phút đọc </span>
+
+                    <span> 📅 18/05/2026 </span>
+                  </div>
+
+                  <a href="article.html" class="btn btn-outline"> Xem thêm </a>
+                </div>
+              </div>
+            </div>
           </div>
 
+          <!-- SIDEBAR -->
+
+          <div class="blog-sidebar">
+            <!-- CATEGORY -->
+
+            <div class="card sidebar-card">
+              <h3>Danh mục</h3>
+
+              <ul class="sidebar-list">
+                <li>🐶 Chăm sóc chó</li>
+
+                <li>🐱 Chăm sóc mèo</li>
+
+                <li>🍖 Dinh dưỡng</li>
+
+                <li>🏠 Nhận nuôi</li>
+
+                <li>🩺 Thú y cơ bản</li>
+              </ul>
+            </div>
+
+            <!-- TRENDING -->
+
+            <div class="card sidebar-card">
+              <h3>Chủ đề nổi bật</h3>
+
+              <div class="trending-list">
+                <!-- ITEM -->
+
+                <div class="trending-item">
+                  <img
+                    src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b"
+                  />
+
+                  <div>
+                    <h4>Cách chăm sóc chó mùa hè</h4>
+
+                    <span> 2.1k lượt xem </span>
+                  </div>
+                </div>
+
+                <!-- ITEM -->
+
+                <div class="trending-item">
+                  <img
+                    src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131"
+                  />
+
+                  <div>
+                    <h4>Mèo bỏ ăn phải làm sao?</h4>
+
+                    <span> 1.8k lượt xem </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NEWSLETTER -->
+
+            <div class="card sidebar-card newsletter-card">
+              <h3>Nhận thông báo bài viết mới</h3>
+
+              <p>Đăng ký email để nhận kiến thức chăm sóc thú cưng mới nhất.</p>
+
+              <input type="email" placeholder="Nhập email" />
+
+              <button class="btn btn-primary">Đăng ký</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+
+    <section class="cta-section">
+      <div class="container cta-wrapper">
+        <h2>Học cách yêu thương thú cưng đúng cách</h2>
+
+        <p>Kiến thức đúng sẽ giúp thú cưng khỏe mạnh và hạnh phúc hơn.</p>
+
+        <a href="pets.html" class="btn btn-primary"> Khám phá thú cưng </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+      <div class="container footer-grid">
+        <div>
+          <h2>PetAdopt</h2>
+
+          <p>Nền tảng kết nối nhận nuôi thú cưng chuyên nghiệp.</p>
         </div>
 
-        <!-- SIDEBAR -->
+        <div>
+          <h3>Điều hướng</h3>
 
-        <div class="blog-sidebar">
+          <a href="pets.html"> Thú cưng </a>
 
-          <!-- CATEGORY -->
+          <a href="history.html"> Lịch sử </a>
 
-          <div class="card sidebar-card">
-
-            <h3>
-
-              Danh mục
-
-            </h3>
-
-            <ul class="sidebar-list">
-
-              <li>
-                🐶 Chăm sóc chó
-              </li>
-
-              <li>
-                🐱 Chăm sóc mèo
-              </li>
-
-              <li>
-                🍖 Dinh dưỡng
-              </li>
-
-              <li>
-                🏠 Nhận nuôi
-              </li>
-
-              <li>
-                🩺 Thú y cơ bản
-              </li>
-
-            </ul>
-
-          </div>
-
-          <!-- TRENDING -->
-
-          <div class="card sidebar-card">
-
-            <h3>
-
-              Chủ đề nổi bật
-
-            </h3>
-
-            <div class="trending-list">
-
-              <!-- ITEM -->
-
-              <div class="trending-item">
-
-                <img
-                  src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b">
-
-                <div>
-
-                  <h4>
-
-                    Cách chăm sóc chó mùa hè
-
-                  </h4>
-
-                  <span>
-
-                    2.1k lượt xem
-
-                  </span>
-
-                </div>
-
-              </div>
-
-              <!-- ITEM -->
-
-              <div class="trending-item">
-
-                <img
-                  src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131">
-
-                <div>
-
-                  <h4>
-
-                    Mèo bỏ ăn phải làm sao?
-
-                  </h4>
-
-                  <span>
-
-                    1.8k lượt xem
-
-                  </span>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          <!-- NEWSLETTER -->
-
-          <div class="card sidebar-card newsletter-card">
-
-            <h3>
-
-              Nhận thông báo bài viết mới
-
-            </h3>
-
-            <p>
-
-              Đăng ký email để nhận kiến thức chăm sóc thú cưng mới nhất.
-
-            </p>
-
-            <input
-              type="email"
-              placeholder="Nhập email">
-
-            <button class="btn btn-primary">
-
-              Đăng ký
-
-            </button>
-
-          </div>
-
+          <a href="profile.html"> Hồ sơ </a>
         </div>
 
+        <div>
+          <h3>Liên hệ</h3>
+
+          <p>support@petadopt.com</p>
+
+          <p>0123 456 789</p>
+        </div>
       </div>
+    </footer>
 
-    </div>
+    <!-- TOAST -->
 
-  </section>
+    <div class="toast"></div>
 
-  <!-- CTA -->
+    <!-- JS -->
 
-  <section class="cta-section">
-
-    <div class="container cta-wrapper">
-
-      <h2>
-
-        Học cách yêu thương thú cưng đúng cách
-
-      </h2>
-
-      <p>
-
-        Kiến thức đúng sẽ giúp thú cưng
-        khỏe mạnh và hạnh phúc hơn.
-
-      </p>
-
-      <a
-        href="pets.html"
-        class="btn btn-primary">
-
-        Khám phá thú cưng
-
-      </a>
-
-    </div>
-
-  </section>
-
-  <!-- FOOTER -->
-
-  <footer class="footer">
-
-    <div class="container footer-grid">
-
-      <div>
-
-        <h2>
-          PetAdopt
-        </h2>
-
-        <p>
-
-          Nền tảng kết nối nhận nuôi
-          thú cưng chuyên nghiệp.
-
-        </p>
-
-      </div>
-
-      <div>
-
-        <h3>
-          Điều hướng
-        </h3>
-
-        <a href="pets.html">
-          Thú cưng
-        </a>
-
-        <a href="history.html">
-          Lịch sử
-        </a>
-
-        <a href="profile.html">
-          Hồ sơ
-        </a>
-
-      </div>
-
-      <div>
-
-        <h3>
-          Liên hệ
-        </h3>
-
-        <p>
-          support@petadopt.com
-        </p>
-
-        <p>
-          0123 456 789
-        </p>
-
-      </div>
-
-    </div>
-
-  </footer>
-
-  <!-- TOAST -->
-
-  <div class="toast"></div>
-
-  <!-- JS -->
-
-  <script src="js/app.js"></script>
-
-</body>
-
+    <script src="js/app.js"></script>
+  </body>
 </html>
